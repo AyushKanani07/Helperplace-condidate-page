@@ -1,0 +1,125 @@
+<mat-drawer-container class="example-container" autosize>
+  <mat-drawer #drawer class="example-sidenav w-[300px]" mode="over">
+    <div class="flex justify-between px-[9px] py-[12px] border-b">
+      <div class="w-full">
+        <ul class="flex flex-wrap gap-[9px]">
+          <li
+            class="cursor-pointer rounded-md text-white text-[16px] font-medium w-[100px] h-[40px] bg-[#25ae88] flex justify-center items-center">
+            <a>Login</a></li>
+          <li
+            class="cursor-pointer rounded-md text-white text-[16px] font-medium w-[100px] h-[40px] bg-[#ebba16] flex justify-center items-center">
+            <a>Register</a></li>
+        </ul>
+      </div>
+      <div>
+        <img width="50" height="50" src="https://www.helperplace.com/assets/images/helper-sign-sm.webp" alt="">
+      </div>
+    </div>
+    <div>
+      <ul class="py-[16px]">
+        <li class="py-[15px] px-[10px]">
+          <a>
+            <div class="flex font-medium">
+              <img width="16px" height="16px" src="https://cdn.helperplace.com/icons/job.svg" alt="">
+              <div class="ml-2">JOBS</div>
+            </div>
+          </a>
+        </li>
+        <li class="py-[15px] px-[10px]">
+          <a>
+            <div class="flex font-medium">
+              <img width="16px" height="16px" src="https://cdn.helperplace.com/icons/candidates.svg" alt="">
+              <div class="ml-2">CANDIDATES</div>
+            </div>
+          </a>
+        </li>
+        <li class="py-[15px] px-[10px]">
+          <a>
+            <div class="flex font-medium">
+              <img width="16px" height="16px" src="https://cdn.helperplace.com/icons/agency.svg" alt="">
+              <div class="ml-2">AGENCY SERVICES</div>
+            </div>
+          </a>
+        </li>
+        <li class="py-[15px] px-[10px]">
+          <a>
+            <div class="flex font-medium">
+              <img width="16px" height="16px" src="https://cdn.helperplace.com/icons/more.svg" alt="">
+              <div class="ml-2">NEWS & MORE</div>
+            </div>
+          </a>
+          <ul class="text-[14px]">
+            <li class="pl-[32px] mt-[21px]">
+              <a class="py-[15px] px-[10px]">Tips & News</a>
+            </li>
+            <li class="pl-[35px] mt-[21px]">
+              <a class="py-[15px] px-[10px]">Tranning</a>
+            </li>
+            <li class="pl-[35px] mt-[21px]">
+              <a class="py-[15px] px-[10px]">Partner Offer</a>
+            </li>
+            <li class="pl-[35px] mt-[21px]">
+              <a class="py-[15px] px-[10px]">Event</a>
+            </li>
+            <li class="pl-[35px] mt-[21px]">
+              <a class="py-[15px] px-[10px]">About Us</a>
+            </li>
+            <li class="pl-[35px] mt-[21px]">
+              <a class="py-[15px] px-[10px]">Pricing</a>
+            </li>
+            <li class="pl-[32px] mt-[21px]">
+              <a class="py-[15px] px-[10px]">Public Holiday</a>
+            </li>
+          </ul>
+        </li>
+      </ul>
+    </div>
+  </mat-drawer>
+
+  <div class="w-full mx-auto flex items-center justify-center">
+    <div class="w-full lg:py-[12px] py-[2%] xl:py-[9px] border-b md:border-white">
+      <div class="md:grid md:grid-cols-[15%_60%_25%] xl:px-[14px] md:w-[950px] xl:w-[1440px] md:mx-auto items-center">
+        <div class="flex flex-row justify-center items-center">
+          <div class="ml-[16px] md:hidden">
+            <button type="button" (click)="drawer.toggle()" mat-icon-button>
+              <mat-icon>menu</mat-icon>
+            </button>
+          </div>
+          <div class="w-full h-auto flex justify-start items-center sm:justify-center xl:ml-[4px]">
+            <img class="w-[170px] text-center" src="https://www.helperplace.com/assets/images/helperplace_logo.svg"
+              alt="">
+          </div>
+        </div>
+        <div class="hidden md:flex md:justify-center xl:ml-[21px] md:ml-[9px] xl:justify-start font-medium md:text-[16px]">
+          <ul class="flex flex-wrap gap-[26px] xl:gap-[40px] xl:text-[17px] lg:text-[17px]">
+            <li class="cursor-pointer"><a>JOBS</a></li>
+            <li class="cursor-pointer"><a>CANDIDATES</a></li>
+            <li class="cursor-pointer"><a>AGENCY SERVICES</a></li>
+            <li [matMenuTriggerFor]="menu" class="cursor-pointer"><a>News & More</a></li>
+            <mat-menu #menu="matMenu" class="mt-1 cursor-pointer w-[190px]">
+              <a mat-menu-item>Tips & News</a>
+              <a mat-menu-item>Tranning</a>
+              <a mat-menu-item>Partner Offer</a>
+              <a mat-menu-item>Event</a>
+              <a mat-menu-item>About Us</a>
+              <a mat-menu-item>Pricing</a>
+              <a mat-menu-item>Public Holiday</a>
+            </mat-menu>
+          </ul>
+        </div>
+        <div class="hidden md:flex xl:justify-end">
+          <ul class="flex flex-wrap text-[18px] gap-[12px] justify-end xl:mr-[21px]">
+            <li
+              class="cursor-pointer rounded-md text-white text-[21px] font-medium w-[100px] h-[44px] bg-[#25ae88] flex justify-center items-center">
+              <a>Login</a></li>
+            <li
+              class="cursor-pointer rounded-md text-white text-[21px] font-medium w-[100px] h-[44px] bg-[#ebba16] flex justify-center items-center">
+              <a>Register</a></li>
+          </ul>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <app-candidates></app-candidates>
+</mat-drawer-container>

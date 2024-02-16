@@ -1,0 +1,10 @@
+.mat-typography h3{
+    margin: 0!important;
+}
+
+.example-slider-label {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    margin-top: 10px;
+  }

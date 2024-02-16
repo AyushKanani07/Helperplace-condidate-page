@@ -1,0 +1,73 @@
+<mat-card *ngFor="let candidate of this.store.filteredData()" class="mb-[21px] cursor-pointer">
+    <div class="grid grid-cols-[20%_80%]">
+        <div>
+            <div class="p-[21px]">
+                <a>
+                    <img class="rounded-full border-[1px] border-[#979797]" src={{candidate.profile_photo}} alt="">
+                </a>
+            </div>
+            <div
+                class="tag h-[30px] w-[160px] bg-[#054A84] border-b-2 border-b-yellow-400 mb-[6px] flex items-center place-content-center">
+                <span class="text-white">{{candidate.resume_manager}}</span>
+            </div>
+        </div>
+        <div class="py-[12px] flex flex-col flex-wrap justify-between">
+            <div>
+                <h1><span class="text-[#054a84] font-medium">{{candidate.helper_name}}</span></h1>
+                <div class="flex flex-wrap">
+                    <div>
+                        <span class="text-[18px] font-medium text-[#666]">{{candidate.position_name}} -
+                            {{candidate.contract_sts_name}}</span>
+                    </div>
+                    <div>
+                        <mat-icon><span class="material-symbols-outlined text-[#25ae88]">location_on</span></mat-icon>
+                    </div>
+                    <div>
+                        <span class="text-[18px] font-medium text-[#666]"> {{candidate.country_name}} </span>
+                    </div>
+                </div>
+                <div>
+                    <p class="text-[14px] pr-[21px] text-justify">{{candidate.meta_data | truncate: 220}}</p>
+                </div>
+            </div>
+            <div>
+                <div class="flex flex-wrap  gap-[18px]">
+                    <div class="flex flex-wrap items-center place-content-center">
+                        <mat-icon><span
+                                class="material-symbols-outlined text-[20px] text-[#25ae88]">verified</span></mat-icon>
+                        <span class="text-[16px] font-medium text-[#054a84]">{{candidate.experience_year}}yr
+                            experience</span>
+                    </div>
+                    <div class="flex flex-wrap items-center">
+                        <mat-icon><span
+                                class="material-symbols-outlined text-[20px] text-[#25ae88]">calendar_month</span></mat-icon>
+                        <span class="text-[16px] font-medium text-[#054a84]">From {{candidate.next_job_available_date}}
+                            | {{candidate.job_type_name}} </span>
+                    </div>
+                    <div class="flex flex-wrap items-center">
+                        <mat-icon><span
+                                class="material-symbols-outlined text-[16px] text-[#25ae88] bg-[#25ae88] rounded-full">radio_button_unchecked</span></mat-icon>
+                        <span class="text-[16px] font-medium text-[#054a84]">Very Active</span>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</mat-card>
+
+<div *ngIf="store.totalItems() !== 0" class="w-full flex justify-center">
+    <div class="paginator pb-[21px]">
+        <button mat-button [disabled]="currentPage() === 1" (click)="onPageChange(currentPage() - 1)"
+            class="mr-[9px] cursor-pointer rounded-md border-[1px] px-[12px] w-[90px] py-[4px] bg-[#f9f9f9] hover:bg-[#A7A7A7]">Previous</button>
+        <span>{{ currentPage() }} of {{store.totalItems()}} </span>
+        <button mat-button [disabled]="currentPage() == store.totalItems()" (click)="onPageChange(currentPage() + 1)"
+            class="ml-[9px] cursor-pointer rounded-md border-[1px] px-[12px] w-[90px] py-[4px] bg-[#f9f9f9] hover:bg-[#A7A7A7]">Next</button>
+    </div>
+</div>
+
+<div *ngIf="store.totalItems() == 0" class="w-full">
+    <div class="mx-auto flex flex-wrap flex-row gap-[21px] justify-center mt-[50px]">
+        <img class="bg-[#FAFAFA]" src="https://cdn.helperplace.com/web-asset/images/empty-search.jpg" alt="">
+        <span class="text-[#054a84] text-[24px]">To find available candidates, you just need to adjust your search criteria.</span>
+    </div>
+</div>

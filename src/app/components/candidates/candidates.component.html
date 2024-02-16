@@ -1,0 +1,34 @@
+
+
+    <div class="w-full px-[15px]">
+        <div class="xl:w-[1420px] xl:px-[9px] md:w-[1120px] mx-auto lg:mt-[12px] mt-[21px]">
+            <div>
+                <div>
+                    <app-header></app-header>
+                </div>
+                <form [formGroup]="orderForm" class="px-[4px]">
+                    <div class="my-[20px]">
+                        <div class="flex flex-wrap justify-end items-center">
+                            <div class="mr-[9px] grid content-center">
+                                <span class="text-[21px] text-[#054a84] font-medium">Order By : </span>
+                            </div>
+                            <div>
+                                <select formControlName="order" class="border-[1px] h-[30px] w-[140px] pl-[9px] text-black border-black">
+                                    <option *ngFor="let order of Order" [value]="order.order_id">{{order.order_value}}
+                                    </option>
+                                </select>
+                            </div>
+                        </div>
+                    </div>
+                </form>
+                <div class="mt-[20px] grid grid-cols-[27%_73%]">
+                    <div class="pr-[12px]">
+                        <app-filters></app-filters>
+                    </div>
+                    <div class="flex flex-wrap justify-end pl-[12px]">
+                        <app-profiles></app-profiles>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
