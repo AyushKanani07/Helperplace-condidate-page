@@ -12,7 +12,7 @@
   "private": true,
   "dependencies": {
     "@angular-architects/ngrx-toolkit": "^0.0.4",
-    "@angular-slider/ngx-slider": "17.0.1",
+    "@angular-slider/ngx-slider": "^17.0.1",
     "@angular/animations": "^17.1.0",
     "@angular/cdk": "^17.1.2",
     "@angular/common": "^17.1.0",

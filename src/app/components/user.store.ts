@@ -97,7 +97,6 @@ export const UserStore = signalStore(
             filtering()
         },
         onDestroy() {
-            // console.log('Destory');
         }
     })
 

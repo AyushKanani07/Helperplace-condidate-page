@@ -1,53 +1,55 @@
-<mat-card *ngFor="let candidate of this.store.filteredData()" class="mb-[21px] cursor-pointer">
-    <div class="grid grid-cols-[20%_80%]">
-        <div>
-            <div class="p-[21px]">
+<mat-card *ngFor="let candidate of this.store.filteredData()" class="mb-[21px] cursor-pointer w-[]">
+    <div class="grid md:grid-cols-[20%_80%] sm:grid-cols-[25%_75%] grid-cols-[35%_65%]">
+        <div class="flex flex-col justify-between">
+            <div class="lg:p-[16px] md:p-[12px]  sm:p-[16px] p-[9px]">
                 <a>
                     <img class="rounded-full border-[1px] border-[#979797]" src={{candidate.profile_photo}} alt="">
                 </a>
             </div>
             <div
-                class="tag h-[30px] w-[160px] bg-[#054A84] border-b-2 border-b-yellow-400 mb-[6px] flex items-center place-content-center">
+                class="tag h-[30px] lg:w-[140px] md:w-[110px] sm:w-[140px] w-[110px] bg-[#054A84] border-b-2 border-b-yellow-400 mb-[6px] flex items-center place-content-center">
                 <span class="text-white">{{candidate.resume_manager}}</span>
             </div>
         </div>
-        <div class="py-[12px] flex flex-col flex-wrap justify-between">
+        <div class="py-[12px] xl:pt-[21px] flex flex-col flex-wrap md:justify-between">
             <div>
-                <h1><span class="text-[#054a84] font-medium">{{candidate.helper_name}}</span></h1>
-                <div class="flex flex-wrap">
+                <span class="text-[#054a84] md:text-[21px] sm:text-[22px] text-[20px] font-medium">{{candidate.helper_name}} - {{candidate.age}}yr</span>
+                <div class="flex flex-wrap md:flex-row sm:flex-col flex-col sm:mt-[12px] mt-[7px]">
                     <div>
-                        <span class="text-[18px] font-medium text-[#666]">{{candidate.position_name}} -
+                        <span class="lg:text-[18px] md:text-[15px] font-medium text-[#666]">{{candidate.position_name}} -
                             {{candidate.contract_sts_name}}</span>
                     </div>
-                    <div>
-                        <mat-icon><span class="material-symbols-outlined text-[#25ae88]">location_on</span></mat-icon>
-                    </div>
-                    <div>
-                        <span class="text-[18px] font-medium text-[#666]"> {{candidate.country_name}} </span>
+                    <div class="flex flex-wrap items-center">
+                        <div>
+                            <mat-icon><span class="material-symbols-outlined text-[18px] text-[#25ae88]">location_on</span></mat-icon>
+                        </div>
+                        <div>
+                            <span class="lg:text-[18px] md:text-[15px] font-medium text-[#666]"> {{candidate.country_name}} </span>
+                        </div>
                     </div>
                 </div>
-                <div>
-                    <p class="text-[14px] pr-[21px] text-justify">{{candidate.meta_data | truncate: 220}}</p>
+                <div class="md:flex hidden">
+                    <p class="lg:text-[14px] md:text-[12px] pr-[21px] text-justify">{{candidate.meta_data | truncate: 220}}</p>
                 </div>
             </div>
             <div>
-                <div class="flex flex-wrap  gap-[18px]">
-                    <div class="flex flex-wrap items-center place-content-center">
+                <div class="flex flex-wrap md:flex-row sm:flex-col md:gap-[18px]">
+                    <div class="flex flex-wrap items-center">
                         <mat-icon><span
-                                class="material-symbols-outlined text-[20px] text-[#25ae88]">verified</span></mat-icon>
-                        <span class="text-[16px] font-medium text-[#054a84]">{{candidate.experience_year}}yr
+                                class="material-symbols-outlined sm:text-[20px] text-[18px] text-[#25ae88]">verified</span></mat-icon>
+                        <span class="lg:text-[16px] md:text-[14px] font-medium text-[#054a84]">{{candidate.experience_year}}yr
                             experience</span>
                     </div>
                     <div class="flex flex-wrap items-center">
                         <mat-icon><span
-                                class="material-symbols-outlined text-[20px] text-[#25ae88]">calendar_month</span></mat-icon>
-                        <span class="text-[16px] font-medium text-[#054a84]">From {{candidate.next_job_available_date}}
+                                class="material-symbols-outlined sm:text-[20px] text-[18px] text-[#25ae88]">calendar_month</span></mat-icon>
+                        <span class="lg:text-[16px] md:text-[14px] font-medium text-[#054a84]">From {{candidate.next_job_available_date}}
                             | {{candidate.job_type_name}} </span>
                     </div>
                     <div class="flex flex-wrap items-center">
                         <mat-icon><span
-                                class="material-symbols-outlined text-[16px] text-[#25ae88] bg-[#25ae88] rounded-full">radio_button_unchecked</span></mat-icon>
-                        <span class="text-[16px] font-medium text-[#054a84]">Very Active</span>
+                                class="material-symbols-outlined sm:text-[16px] text-[14px] text-[#25ae88] bg-[#25ae88] rounded-full">radio_button_unchecked</span></mat-icon>
+                        <span class="lg:text-[16px] md:text-[14px] font-medium text-[#054a84]">Very Active</span>
                     </div>
                 </div>
             </div>

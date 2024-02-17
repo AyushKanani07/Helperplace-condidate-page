@@ -16,6 +16,8 @@ import { FilterProperties, QueryParamFilterProperties } from '../data-type';
 import { Subscription } from 'rxjs';
 import { UserStore } from '../user.store';
 import { FormBuilder, FormGroup} from '@angular/forms';
+import { FilterPopupComponent } from '../filter-popup/filter-popup.component';
+import { MatDialog } from '@angular/material/dialog';
 
 @Component({
     selector: 'app-candidates',
@@ -49,10 +51,8 @@ export class CandidatesComponent implements OnInit, OnDestroy {
       }
     ];
 
-    constructor(private fb: FormBuilder, private router: Router, private activatedRoute: ActivatedRoute, private service: ServiceService){
-
+    constructor(private dialog: MatDialog, private fb: FormBuilder, private router: Router, private activatedRoute: ActivatedRoute, private service: ServiceService){
         this.queryParamsSubscription = this.activatedRoute.queryParams.subscribe((res) => {
-          console.log(res);
           this.queryParams = res;
 
           if(res['order_by']){
@@ -66,12 +66,10 @@ export class CandidatesComponent implements OnInit, OnDestroy {
           }
 
           this.service.updateFilterParameter(this.filterParameter());
-          this.store.loadCandidates(this.service.getCurrentFilterParameters());
         })
     }
 
     ngOnInit(): void {
-        // this.store.loadCandidates(this.service.getCurrentFilterParameters());
         this.orderForm = this.fb.group({
           order: [this.order()]
         });
@@ -90,9 +88,7 @@ export class CandidatesComponent implements OnInit, OnDestroy {
         })
     }
 
-
     findOrderValue(orderId: number): string | undefined{
-      // console.log(orderId)
       const orderValue = this.Order.find(val => val.order_id == orderId);
       if(orderValue){
         const modifiedOrderValue = orderValue.order_value.toLowerCase().replace(/\b\w/g, (char: string) => char.toLowerCase());
@@ -106,6 +102,21 @@ export class CandidatesComponent implements OnInit, OnDestroy {
       return orderId ? orderId.order_id : undefined
     }
 
+    Filter(){
+      this.OpenPopup();
+    }
+
+    OpenPopup() {
+      this.dialog.open(FilterPopupComponent, {
+        width: '70%',
+        height: '92%',
+        enterAnimationDuration: '900ms',
+        exitAnimationDuration: '400ms',
+        data: {
+        }
+      })
+  
+    }
 
     ngOnDestroy(): void {
         if (this.queryParamsSubscription) {

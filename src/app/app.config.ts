@@ -12,8 +12,6 @@ import { NgxSliderModule } from '@angular-slider/ngx-slider';
 export const appConfig: ApplicationConfig = {
   providers: [provideRouter(routes), provideClientHydration(), provideAnimationsAsync(), DatePipe,
     provideHttpClient(withFetch()),
-    importProvidersFrom([
-      NgxSliderModule
-    ]),
+    // importProvidersFrom([NgxSliderModule]),
      provideStoreDevtools({ maxAge: 25, logOnly: !isDevMode() })]
 };

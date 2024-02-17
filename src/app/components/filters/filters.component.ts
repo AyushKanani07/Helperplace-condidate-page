@@ -1,14 +1,15 @@
-import { Component, OnDestroy, OnInit, inject, signal } from '@angular/core';
+import { Component, Inject, OnDestroy, OnInit, PLATFORM_ID, inject, signal } from '@angular/core';
 import { SharedModule } from '../../shared/shared.module';
 import { FormBuilder, FormGroup, ReactiveFormsModule } from '@angular/forms';
 import { provideNativeDateAdapter } from '@angular/material/core';
 import { ActivatedRoute, Router } from '@angular/router';
-import { DatePipe } from '@angular/common';
-import { Subscription } from 'rxjs';
+import { DatePipe, isPlatformBrowser } from '@angular/common';
+import { Subscription, debounceTime } from 'rxjs';
 import { FilterProperties, QueryParamFilterProperties } from '../data-type';
 import { UserStore } from '../user.store';
 import { ServiceService } from '../services/service.service';
 import { NgxSliderModule, Options } from '@angular-slider/ngx-slider';
+import { MatSliderChange, MatSliderDragEvent } from '@angular/material/slider';
 
 @Component({
   selector: 'app-filters',
@@ -20,17 +21,31 @@ import { NgxSliderModule, Options } from '@angular-slider/ngx-slider';
 })
 export class FiltersComponent implements OnInit, OnDestroy {
 
-  value: number = 100;
+  value: number = 0;
+  highValue: number = 40;
   options: Options = {
     floor: 0,
-    ceil: 200
+    ceil: 40,
   };
+
+  exp_value = signal(0);
+  exp_highValue = signal(40);
+
+  age_value: number = 18;
+  age_highValue: number = 60;
+  age_options: Options = {
+    floor: 18,
+    ceil: 60,
+  };
+
+  age_val = signal(18);
+  age_highVal = signal(60);
 
   filterForm!: FormGroup;
   private queryParamsSubscription: Subscription;
-  // filterParameter: FilterProperties = {};
+  
   filterParameter = signal<FilterProperties>({});
-  queryParams:QueryParamFilterProperties={}
+  queryParams: QueryParamFilterProperties = {}
   jobPositions: any[];
   candidateLocation: any[];
   jobType: any[];
@@ -39,29 +54,25 @@ export class FiltersComponent implements OnInit, OnDestroy {
   mainSkill: any[];
   nationalities: any[];
   resumeManager = [{
-      resume_manager_id: 1,
-      resume_manager_name: 'Direct'
-    },
-    {
-      resume_manager_id: 2,
-      resume_manager_name: 'Agency'
-    }];
+    resume_manager_id: 1,
+    resume_manager_name: 'Direct'
+  },
+  {
+    resume_manager_id: 2,
+    resume_manager_name: 'Agency'
+  }];
 
   Gender = [{
-      gender_id: 1,
-      gender_value: 'Male'
-    },
-    {
-      gender_id: 2,
-      gender_value: 'Female'
-    }
+    gender_id: 1,
+    gender_value: 'Male'
+  },
+  {
+    gender_id: 2,
+    gender_value: 'Female'
+  }
   ];
 
-
-
-
-  // queryParams: any = {}
-
+  //form default value
   job_position = signal(0);
   job_type = signal(0);
   resume_by = signal(0);
@@ -69,17 +80,20 @@ export class FiltersComponent implements OnInit, OnDestroy {
   location = signal<(number | undefined)[]>([]);
   contract_status = signal<(number | undefined)[]>([]);
   language_skill = signal<(number | undefined)[]>([]);
-  main_skill = signal<(number| undefined)[]>([]);
+  main_skill = signal<(number | undefined)[]>([]);
   nationality = signal(0);
   gender = signal(0);
   search = signal('');
+  exp_Range = signal('');
+  age_Range = signal('');
   page = 1;
 
   datePipe = inject(DatePipe);
   private store = inject(UserStore)
-  // private isBrowser = typeof window !== 'undefined';
+  isBrowser: boolean;
 
-  constructor(private fb: FormBuilder, private router: Router, private activatedRoute: ActivatedRoute, private service: ServiceService) {
+  constructor(@Inject(PLATFORM_ID) private platformId: Object, private fb: FormBuilder, private router: Router, private activatedRoute: ActivatedRoute, private service: ServiceService) {
+    this.isBrowser = isPlatformBrowser(platformId);
     this.jobPositions = this.store.master().data.job_position;
     this.candidateLocation = this.store.master().data.candidate_country;
     this.jobType = this.store.master().data.job_type;
@@ -88,14 +102,35 @@ export class FiltersComponent implements OnInit, OnDestroy {
     this.mainSkill = this.findMainSkill();
     this.nationalities = this.store.master().data.nationality;
     this.queryParamsSubscription = this.activatedRoute.queryParams.subscribe((res) => {
-      // this.queryParams = res;
-      // console.log(this.queryParams)
-      // console.log(res);
       if (res['page']) {
         this.page = res['page'];
         this.filterParameter().page = this.page - 1;
       } else {
         this.page = 1
+      }
+
+      if(res['experience_range']){
+        const [min, max] = res['experience_range'].split('-').map(Number);
+        this.filterParameter().experience_min = min;
+        this.filterParameter().experience_max = max;
+        this.exp_value.set(min);
+        this.exp_highValue.set(max);
+      }
+      else{
+        this.filterParameter().experience_min = undefined;
+        this.filterParameter().experience_max = undefined;
+      }
+
+      if(res['age_range']){
+        const [min, max] = res['age_range'].split('-').map(Number);
+        this.filterParameter().age_min = min;
+        this.filterParameter().age_max = max;
+        this.age_val.set(min);
+        this.age_highVal.set(max);
+      }
+      else{
+        this.filterParameter().age_min = undefined;
+        this.filterParameter().age_max = undefined;
       }
 
       if (res['job_position']) {
@@ -104,29 +139,22 @@ export class FiltersComponent implements OnInit, OnDestroy {
           const jobPositionId = this.findJobPositionId(jobPosition);
           if (jobPositionId !== undefined) {
             this.filterParameter().job_position = jobPositionId;
-            // console.log(jobPositionId)
             this.job_position.set(jobPositionId);
-            // this.filterForm.patchValue({
-            //   job_position: jobPositionId
-            // });
           }
         }
+      }
+      else{
+        this.filterParameter().job_position = undefined
       }
 
       if (res['start_date']) {
         this.filterParameter().start_date = res['start_date'];
         const date = this.datePipe.transform(res['start_date'], 'M-d-yyyy');
         this.startDate.set(date as string);
-        if (this.filterForm) {
-          this.filterForm.patchValue({
-            start_date: new Date('2024-02-22')
-          })
-        }
       }
 
       if (res['country']) {
         const location = res['country'] ? res['country'].replace(/-/g, ' ').split(',').map((item: string) => item.trim()) : [];
-        // console.log(location)
         const countryId = this.findLocationId(location);
         this.filterParameter().country = countryId;
       } else {
@@ -143,11 +171,13 @@ export class FiltersComponent implements OnInit, OnDestroy {
           }
         }
       }
+      else{
+        this.filterParameter().job_type = undefined;
+      }
 
       if (res['contract_status']) {
         const contract = res['contract_status'] ? res['contract_status'].replace(/-/g, ' ').split(',').map((item: string) => item.trim()) : [];
         const contractId = this.findContractId(contract);
-        console.log(contractId)
         this.filterParameter().contract_status = contractId;
       } else {
         this.filterParameter().contract_status = '';
@@ -163,65 +193,68 @@ export class FiltersComponent implements OnInit, OnDestroy {
           }
         }
       }
+      else{
+        this.filterParameter().post_manager = undefined
+      }
 
       if (res['Language']) {
         const language = res['Language'] ? res['Language'].replace(/-/g, ' ').split(',').map((item: string) => item.trim()) : [];;
         const languageId = this.findLanguageId(language);
-        // console.log(languageId);
         this.filterParameter().Language = languageId;
       } else {
         this.filterParameter().Language = [];
       }
 
-      if(res['Main_Skills']){
+      if (res['Main_Skills']) {
         const skill = res['Main_Skills'] ? res['Main_Skills'].replace(/-/g, ' ').split(',').map((item: string) => item.trim()) : [];
         const skillId = this.findSkillId(skill);
         this.filterParameter().Main_Skills = skillId
-      }else{
+      } else {
         this.filterParameter().Main_Skills = [];
       }
 
-      if(res['nationality']){
+      if (res['nationality']) {
         const nationality = res['nationality'] ? res['nationality'].replace(/-/g, ' ') : '';
-        if(nationality){
+        if (nationality) {
           const id = this.findNationalityId(nationality);
-          if(id !== undefined){
+          if (id !== undefined) {
             this.filterParameter().nationality = id;
             this.nationality.set(id)
           }
         }
-      }else{
+      } else {
         this.nationality.set(0);
         this.filterParameter().nationality = '';
       }
 
-      if(res['gender']){
+      if (res['gender']) {
         this.filterParameter().gender = res['gender'];
         const gender = res['gender'] ? res['gender'].replace(/-/g, ' ') : '';
-        if(gender){
+        if (gender) {
           const genderId = this.findGenderId(gender);
-          if(genderId !== undefined){
+          if (genderId !== undefined) {
             this.gender.set(genderId)
           }
         }
       }
+      else{
+        this.filterParameter().gender = undefined
+      }
 
-      if(res['name']){
+      if (res['name']) {
         this.filterParameter().name = res['name'];
         this.search.set(res['name']);
       }
+      else{
+        this.filterParameter().name = ''
+      }
 
-      // console.log(this.filterParameter())
       this.service.updateFilterParameter(this.filterParameter())
       this.store.loadCandidates(this.service.getCurrentFilterParameters());
-      // this.store.loadCandidates(this.filterParameter)
     })
   }
 
   ngOnInit(): void {
-    // console.log(this.jobPositions)
-    // console.log(this.location())
-    // console.log(this.filterForm.value)
     this.filterForm = this.fb.group({
       job_position: [this.job_position()],
       start_date: [],
@@ -233,54 +266,118 @@ export class FiltersComponent implements OnInit, OnDestroy {
       skill: [this.main_skill()],
       nationality: [this.nationality()],
       gender: [this.gender()],
-      search: [this.search()]
+      search: [this.search()],
+      exprange: [[this.exp_value(), this.exp_highValue()]],
+      age:[[this.age_val(), this.age_highVal()]],
     });
 
+
     this.filterForm.valueChanges.subscribe((value) => {
-      const jobPositionName = this.findJobPositionName(value['job_position']);
-      const formattedDate = this.datePipe.transform(value.start_date, 'yyyy-MM-dd');
-      const location = this.findLocationName(value['location']);
-      const jobtype = this.findJobTypeName(value['job_type']);
-      const contractStatus = this.findContractName(value['contractStatus']);
-      const resumeManager = this.findResumeName(value['resume_by']);
-      const language = this.findLanguageName(value['language']);
-      const skill = this.findSkillName(value['skill']);
-      const nationality = this.findNationalityName(value['nationality']);
-      const gender = this.findGenderValue(value['gender'])
-
       this.queryParams = {
-        page: this.page,
-        job_position: jobPositionName,
-        start_date: formattedDate,
-        job_type: jobtype,
-        post_manager: resumeManager,
-        nationality: nationality,
-        gender: gender
+        page: this.page
       }
-      if (location) {
-        this.queryParams.country = location;
+      if(value['exprange']){
+        const range = this.exp_Range()
+        if(range){
+          this.queryParams.experience_range = range;
+        }
       }
-      if (contractStatus) {
-        this.queryParams.contract_status = contractStatus;
+      if(value['age']){
+      const range = this.age_Range()
+        if(range){
+        this.queryParams.age_range = range
+        }
       }
-      if (language) {
-        this.queryParams.Language = language;
+      if (value['job_position']) {
+        const jobPosition = this.findJobPositionName(value['job_position']);
+        if (jobPosition) {
+          this.queryParams.job_position = jobPosition;
+        }
       }
-      if(skill){
-        this.queryParams.Main_Skills = skill;
+      if (value['start_date']) {
+        const date = this.datePipe.transform(value['start_date'], 'yyyy-MM-dd');
+        if (date) {
+          this.queryParams.start_date = date;
+        }
       }
-
+      if (value['location']) {
+        const location = this.findLocationName(value['location']);
+        if (location) {
+          this.queryParams.country = location;
+        }
+      }
+      if (value['job_type']) {
+        const jobType = this.findJobTypeName(value['job_type']);
+        if (jobType) {
+          this.queryParams.job_type = jobType;
+        }
+      }
+      if (value['contractStatus']) {
+        const contract = this.findContractName(value['contractStatus']);
+        if (contract) {
+          this.queryParams.contract_status = contract;
+        }
+      }
+      if (value['resume_by']) {
+        const resumeBy = this.findResumeName(value['resume_by']);
+        if (resumeBy) {
+          this.queryParams.post_manager = resumeBy;
+        }
+      }
+      if (value['language']) {
+        const language = this.findLanguageName(value['language']);
+        if (language) {
+          this.queryParams.Language = language;
+        }
+      }
+      if (value['skill']) {
+        const skill = this.findSkillName(value['skill']);
+        if (skill) {
+          this.queryParams.Main_Skills = skill;
+        }
+      }
+      if (value['nationality']) {
+        const nationality = this.findNationalityName(value['nationality']);
+        if (nationality) {
+          this.queryParams.nationality = nationality;
+        }
+      }
+      if (value['gender']) {
+        const gender = this.findGenderValue(value['gender']);
+        if (gender) {
+          this.queryParams.gender = gender;
+        }
+      }
       this.navigateQuery()
-      // console.log(this.filterParameter)
-
     })
   }
 
-  navigateQuery(){
+  expRange(event: any) {
+    const range = event.value + '-' + event.highValue
+    if (range) {
+      this.queryParams.experience_range = range;
+      this.exp_Range.set(range)
+      this.navigateQuery()
+    }
+  }
+
+  ageRange(event: any) {
+    console.log('event: ', event);
+    const range = event.value + '-' + event.highValue
+    if (range) {
+      this.queryParams.age_range = range;
+      this.age_Range.set(range)
+      this.navigateQuery()
+    }
+  }
+
+
+  navigateQuery() {
     this.router.navigate([], {
       queryParams: this.queryParams
     });
   }
+
 
   masterData = this.store.master.data;
   findJobPositionName(jobPositionId: number): string | undefined {
@@ -294,6 +391,7 @@ export class FiltersComponent implements OnInit, OnDestroy {
   }
 
   findLocationName(location: number[]): string | undefined {
+    if (!location) return ''
     const locationNames = location.map(locationId => {
       const foundLocation = this.masterData().candidate_country.find(country => country.country_id === locationId);
       return foundLocation ? foundLocation.country_name : undefined
@@ -302,11 +400,11 @@ export class FiltersComponent implements OnInit, OnDestroy {
   }
 
   findLocationId(location: string[]) {
+    if (!location) return ''
     const locationId = location.map(locationName => {
       const foundName = this.masterData().candidate_country.find(country => country.country_name === locationName);
       return foundName ? foundName.country_id : undefined;
     });
-    // console.log(locationId)
     this.location.set(locationId)
     return locationId.join(',')
   }
@@ -334,7 +432,6 @@ export class FiltersComponent implements OnInit, OnDestroy {
       const foundName = this.masterData().contract_status.find(contract => contract.contract_sts_name === contractName);
       return foundName ? foundName.contract_sts_id : undefined;
     });
-    // console.log(locationId)
     this.contract_status.set(contractId)
     return contractId.join(',')
   }
@@ -363,13 +460,12 @@ export class FiltersComponent implements OnInit, OnDestroy {
       return foundName ? foundName.language_id : undefined;
     });
     this.language_skill.set(languageId)
-    // console.log(languageId)
     return languageId
   }
 
   findMainSkill(): any[] {
     const mainSkillsCategoryId = this.masterData().skill_category.find(category => category.skill_category_name === 'Main Skills')?.skill_category_id;
-    if(mainSkillsCategoryId !== undefined){
+    if (mainSkillsCategoryId !== undefined) {
       const mainSkill = this.masterData().skills.filter(skill => skill.skill_category_id === mainSkillsCategoryId);
       const mainSkillDetails = mainSkill.map(skill => ({
         skill_category_id: skill.skill_category_id,
@@ -379,7 +475,7 @@ export class FiltersComponent implements OnInit, OnDestroy {
       }));
       return mainSkillDetails
     }
-    else{
+    else {
       return [];
     }
   }
@@ -398,13 +494,12 @@ export class FiltersComponent implements OnInit, OnDestroy {
       return foundName ? foundName.skill_id : undefined;
     });
     this.main_skill.set(skillId)
-    // console.log(languageId)
     return skillId
   }
 
   findNationalityName(id: number): string | undefined {
-    const nationality = this.masterData().nationality.find(val => val.nationality_id=== id);
-    return nationality ? nationality.nationality_name.replace(/\s+/g, '-'): undefined;
+    const nationality = this.masterData().nationality.find(val => val.nationality_id === id);
+    return nationality ? nationality.nationality_name.replace(/\s+/g, '-') : undefined;
   }
 
   findNationalityId(name: string): number | undefined {
@@ -422,20 +517,38 @@ export class FiltersComponent implements OnInit, OnDestroy {
     return genderId ? genderId.gender_id : undefined;
   }
 
-  onSearchClick(){
+  onSearchClick() {
     const searchValue = this.filterForm.get('search')?.value;
-    if(searchValue){
+    if (searchValue) {
       this.queryParams.name = searchValue;
       this.navigateQuery()
     }
   }
 
 
-
   reset() {
-    // this.filterForm.reset(); 
-  }
+    this.filterForm.patchValue({
+      job_position: 0,
+      start_date: '',
+      location: [],
+      job_type: 0,
+      contractStatus: [],
+      resume_by: 0,
+      language: [],
+      skill: [],
+      nationality: 0,
+      gender: 0,
+      search: '',
+      exprange: [0,40],
+      age: [18,60]
+    });
 
+    this.queryParams = {
+      page: this.page
+    }
+    console.log('this.filterForm: ', this.filterForm.value);
+    this.navigateQuery();
+  }
 
   ngOnDestroy(): void {
     if (this.queryParamsSubscription) {

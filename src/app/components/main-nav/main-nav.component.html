@@ -1,5 +1,5 @@
 <mat-drawer-container class="example-container" autosize>
-  <mat-drawer #drawer class="example-sidenav w-[300px]" mode="over">
+  <mat-drawer #drawer class="example-sidenav sm:w-[380px] w-[300px]" mode="over">
     <div class="flex justify-between px-[9px] py-[12px] border-b">
       <div class="w-full">
         <ul class="flex flex-wrap gap-[9px]">
@@ -77,15 +77,15 @@
   </mat-drawer>
 
   <div class="w-full mx-auto flex items-center justify-center">
-    <div class="w-full lg:py-[12px] py-[2%] xl:py-[9px] border-b md:border-white">
-      <div class="md:grid md:grid-cols-[15%_60%_25%] xl:px-[14px] md:w-[950px] xl:w-[1440px] md:mx-auto items-center">
-        <div class="flex flex-row justify-center items-center">
-          <div class="ml-[16px] md:hidden">
+    <div class="w-full md:py-[12px] sm:py-[9px] py-[2%] xl:py-[9px] border-b sm:border-white">
+      <div class="md:grid md:grid-cols-[15%_60%_25%] xl:px-[14px] md:w-[900px] lg:w-[1100px] xl:w-[1440px] md:mx-auto items-center">
+        <div class="flex flex-row justify-center items-center w-[700px] mx-auto">
+          <div class="ml-[16px] sm:ml-[0px] md:hidden flex flex-wrap">
             <button type="button" (click)="drawer.toggle()" mat-icon-button>
               <mat-icon>menu</mat-icon>
             </button>
           </div>
-          <div class="w-full h-auto flex justify-start items-center sm:justify-center xl:ml-[4px]">
+          <div class="w-full h-auto flex justify-start items-center md:justify-start sm:justify-center xl:ml-[4px]">
             <img class="w-[170px] text-center" src="https://www.helperplace.com/assets/images/helperplace_logo.svg"
               alt="">
           </div>
@@ -107,13 +107,13 @@
             </mat-menu>
           </ul>
         </div>
-        <div class="hidden md:flex xl:justify-end">
+        <div class="hidden md:flex justify-end">
           <ul class="flex flex-wrap text-[18px] gap-[12px] justify-end xl:mr-[21px]">
             <li
-              class="cursor-pointer rounded-md text-white text-[21px] font-medium w-[100px] h-[44px] bg-[#25ae88] flex justify-center items-center">
+              class="cursor-pointer rounded-md text-white text-[21px] lg:text-[21px] md:text-[18px] font-medium w-[100px] h-[44px] lg-h-[44px] md:h-[40px] bg-[#25ae88] flex justify-center items-center">
               <a>Login</a></li>
             <li
-              class="cursor-pointer rounded-md text-white text-[21px] font-medium w-[100px] h-[44px] bg-[#ebba16] flex justify-center items-center">
+              class="cursor-pointer rounded-md text-white text-[21px] lg:text-[21px] md:text-[18px] font-medium w-[100px] h-[44px] lg-h-[44px] md:h-[40px] bg-[#ebba16] flex justify-center items-center">
               <a>Register</a></li>
           </ul>
         </div>

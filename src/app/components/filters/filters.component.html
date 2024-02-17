@@ -1,7 +1,7 @@
-<mat-card>
+<mat-card class="md:w-[220px] lg:w-full">
     <div class="px-[15px] border-[1px] border-[#979797] rounded-md bg-[#f9f9f9]">
         <div class="mt-[2rem] mb-[0.75rem]">
-            <p class="my-[4px] pl-[12px] text-[27px] text-[#054a84]">I'm Looking For</p>
+            <p class="my-[4px] pl-[12px] text-[27px] lg:text-[27px] md:text-[21px] text-[#054a84]">I'm Looking For</p>
         </div>
 
         <form [formGroup]="filterForm" class="px-[4px]">
@@ -12,24 +12,26 @@
                 <div class="">
                     <button class="flex flex-wrap items-center font-medium" (click)="reset()">
                         <mat-icon><span class="material-symbols-outlined text-[#25ae88]">refresh</span></mat-icon>
-                        <mat-label class="text-[18px] text-[#25ae88]">Reset</mat-label>
+                        <mat-label class="text-[16px] text-[#25ae88]">Reset</mat-label>
                     </button>
                 </div>
             </div>
 
             <div>
                 <div class="border-b-[2px] border-[#25ae88] pb-[4px]">
-                    <span class="font-medium text-[17px] text-[#054a84] ">Job Position</span>
+                    <span class="font-medium text-[17px] lg:text-[17px] md:text-[16px] text-[#054a84] ">Job
+                        Position</span>
                 </div>
-                <mat-radio-group name="flavors" formControlName="job_position" class="flex flex-col">
+                <mat-radio-group name="jobPositions" formControlName="job_position" class="flex flex-col">
                     <mat-radio-button *ngFor="let position of jobPositions" [value]="position.job_position_id">{{
                         position.position_name }}</mat-radio-button>
                 </mat-radio-group>
             </div>
 
             <div class="mt-[12px]">
-                <span class="font-medium text-[17px] text-[#054a84] mt-[12px]">Start Date</span>
-                <mat-form-field class="example-form-field" class="w-full">
+                <span class="font-medium text-[17px] lg:text-[17px] md:text-[16px] text-[#054a84] mt-[12px]">Start
+                    Date</span>
+                <mat-form-field class="example-form-field" class="w-full h-[90%]">
                     <input matInput [matDatepicker]="datepicker" placeholder="mm-dd-yyyy" formControlName="start_date">
                     <mat-datepicker-toggle matIconSuffix [for]="datepicker"></mat-datepicker-toggle>
                     <mat-datepicker #datepicker>
@@ -42,7 +44,8 @@
             </div>
 
             <div class="mt-[12px]">
-                <span class="font-medium text-[17px] text-[#054a84] mt-[12px]">Candidate Location</span>
+                <span class="font-medium text-[17px] lg:text-[17px] md:text-[16px] text-[#054a84] mt-[12px]">Candidate
+                    Location</span>
                 <mat-form-field class="w-full">
                     <mat-select formControlName="location" multiple placeholder="Candidate Location">
                         <mat-option *ngFor="let location of candidateLocation"
@@ -53,16 +56,17 @@
 
             <div>
                 <div class="border-b-[2px] border-[#25ae88] pb-[4px]">
-                    <span class="font-medium text-[17px] text-[#054a84] ">Job Type</span>
+                    <span class="font-medium text-[17px] lg:text-[17px] md:text-[16px] text-[#054a84] ">Job Type</span>
                 </div>
-                <mat-radio-group name="flavors" formControlName="job_type" class="flex flex-col">
+                <mat-radio-group name="jobType" formControlName="job_type" class="flex flex-col">
                     <mat-radio-button *ngFor="let job of jobType" [value]="job.job_type_id">{{
                         job.job_type_name }}</mat-radio-button>
                 </mat-radio-group>
             </div>
 
             <div class="mt-[12px]">
-                <span class="font-medium text-[17px] text-[#054a84] mt-[12px]">Contract Status</span>
+                <span class="font-medium text-[17px] lg:text-[17px] md:text-[16px] text-[#054a84] mt-[12px]">Contract
+                    Status</span>
                 <mat-form-field class="w-full">
                     <mat-select formControlName="contractStatus" multiple placeholder="Contract Status">
                         <mat-option *ngFor="let status of contractStatus"
@@ -73,9 +77,9 @@
 
             <div>
                 <div class="border-b-[2px] border-[#25ae88] pb-[4px]">
-                    <span class="font-medium text-[17px] text-[#054a84] ">Resume by</span>
+                    <span class="font-medium text-[17px] lg:text-[17px] md:text-[16px] text-[#054a84] ">Resume by</span>
                 </div>
-                <mat-radio-group name="flavors" formControlName="resume_by" class="flex flex-col">
+                <mat-radio-group name="resumeBy" formControlName="resume_by" class="flex flex-col">
                     <mat-radio-button *ngFor="let resume of resumeManager" [value]="resume.resume_manager_id">{{
                         resume.resume_manager_name }}</mat-radio-button>
                 </mat-radio-group>
@@ -83,13 +87,17 @@
 
             <div>
                 <div class="border-b-[2px] border-[#25ae88] pb-[4px]">
-                    <span class="font-medium text-[17px] text-[#054a84] ">Working Experience</span>
+                    <span class="font-medium text-[17px] lg:text-[17px] md:text-[16px] text-[#054a84] ">Working
+                        Experience</span>
                 </div>
-                <!-- <ngx-slider [(value)]="value" [options]="options"></ngx-slider> -->
+                <ng-container *ngIf="isBrowser">
+                    <ngx-slider formControlName="exprange" (userChangeEnd)="expRange($event)" [(value)]="value" [(highValue)]="highValue" [options]="options"></ngx-slider>
+                </ng-container>
             </div>
 
             <div class="mt-[12px]">
-                <span class="font-medium text-[17px] text-[#054a84] mt-[12px]">Language</span>
+                <span
+                    class="font-medium text-[17px] lg:text-[17px] md:text-[16px] text-[#054a84] mt-[12px]">Language</span>
                 <mat-form-field class="w-full">
                     <mat-select formControlName="language" multiple placeholder="Search">
                         <mat-option *ngFor="let language of language"
@@ -99,7 +107,8 @@
             </div>
 
             <div class="mt-[12px]">
-                <span class="font-medium text-[17px] text-[#054a84] mt-[12px]">Main Skill</span>
+                <span class="font-medium text-[17px] lg:text-[17px] md:text-[16px] text-[#054a84] mt-[12px]">Main
+                    Skill</span>
                 <mat-form-field class="w-full">
                     <mat-select formControlName="skill" multiple placeholder="Search">
                         <mat-option *ngFor="let skill of mainSkill"
@@ -109,7 +118,8 @@
             </div>
 
             <div class="mt-[12px]">
-                <span class="font-medium text-[17px] text-[#054a84] mt-[12px]">Nationality</span>
+                <span
+                    class="font-medium text-[17px] lg:text-[17px] md:text-[16px] text-[#054a84] mt-[12px]">Nationality</span>
                 <mat-form-field class="w-full">
                     <mat-select formControlName="nationality" placeholder="Any Nationality">
                         <mat-option [value]="0">Any Nationality</mat-option>
@@ -121,9 +131,9 @@
 
             <div>
                 <div class="border-b-[2px] border-[#25ae88] pb-[4px]">
-                    <span class="font-medium text-[17px] text-[#054a84] ">Gender</span>
+                    <span class="font-medium text-[17px] lg:text-[17px] md:text-[16px] text-[#054a84] ">Gender</span>
                 </div>
-                <mat-radio-group name="flavors" formControlName="gender" class="flex flex-col">
+                <mat-radio-group name="gender" formControlName="gender" class="flex flex-col">
                     <mat-radio-button *ngFor="let gender of Gender" [value]="gender.gender_id">{{
                         gender.gender_value }}</mat-radio-button>
                 </mat-radio-group>
@@ -131,13 +141,23 @@
 
             <div>
                 <div class="border-b-[2px] border-[#25ae88] pb-[4px]">
-                    <span class="font-medium text-[17px] text-[#054a84] ">Helper Name</span>
+                    <span class="font-medium text-[17px] lg:text-[17px] md:text-[16px] text-[#054a84] ">Age</span>
+                </div>
+                <ng-container *ngIf="isBrowser">
+                    <ngx-slider formControlName="age" (userChangeEnd)="ageRange($event)" [(value)]="age_value" [(highValue)]="age_highValue" [options]="age_options"></ngx-slider>
+                </ng-container>
+            </div>
+
+            <div>
+                <div class="border-b-[2px] border-[#25ae88] pb-[4px]">
+                    <span class="font-medium text-[17px] lg:text-[17px] md:text-[16px] text-[#054a84] ">Helper
+                        Name</span>
                 </div>
                 <mat-form-field class="example-form-field w-full">
                     <input matInput type="text" formControlName="search" placeholder="Search with Helper Name">
                     <button matSuffix mat-icon-button aria-label="Search" (click)="onSearchClick()">
                         <mat-icon><span class="material-symbols-outlined">
-                            search
+                                search
                             </span></mat-icon>
                     </button>
                 </mat-form-field>

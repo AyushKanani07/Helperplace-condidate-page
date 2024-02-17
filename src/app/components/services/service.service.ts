@@ -10,14 +10,12 @@ import { UserStore } from '../user.store';
 export class ServiceService {
 
   private filterParameter = signal<FilterProperties>({});
-  // private store = inject(UserStore)
 
   constructor(private http: HttpClient) { }
 
   getCandidates(filter: FilterProperties): Observable<CandidateResponse> {
     const page = filter.page;
     const pageSize = filter.pageSize || 20;
-    // const startIndex = ((page || 0) - 1) * pageSize;
     const positionId = filter.job_position;
     const startDate = filter.start_date;
     const country = filter.country;
@@ -30,8 +28,11 @@ export class ServiceService {
     const gender = filter.gender;
     const order_by = filter.order_by;
     const name = filter.name;
+    const exp_min = filter.experience_min;
+    const exp_max = filter.experience_max;
+    const age_min = filter.age_min;
+    const age_max = filter.age_max;
 
-    // Set up the query parameters
     let params = new HttpParams();
     if (page !== undefined) {
       params = params.append('start', page.toString());
@@ -81,28 +82,28 @@ export class ServiceService {
     if(name !== undefined){
       params = params.append('helper_name', name)
     }
-
-    // console.log(params);
+    if(exp_min !== undefined){
+      params = params.append('experience_min', exp_min)
+    }
+    if(exp_max !== undefined){
+      params = params.append('experience_max', exp_max)
+    }
+    if(age_min !== undefined){
+      params = params.append('age_min', age_min)
+    }
+    if(age_max !== undefined){
+      params = params.append('age_max', age_max)
+    }
 
     return this.http.get<CandidateResponse>('https://api.helperplace.com/api/mobile/candidate/FindCandidate', { params });
   }
-
-  // getCandidate(page: number, pageSize: number): Observable<CandidateResponse>{
-  //   return this.http.get<CandidateResponse>('https://api.helperplace.com/api/mobile/candidate/FindCandidate?start=0&length=20');
-  // }
 
   getMasterdata() {
     return this.http.get('https://api.helperplace.com/api/mobile/masterdata/GetAllMasterDataJson');
   }
 
   updateFilterParameter(newFilter: Partial<FilterProperties>) {
-    // Update the filterParameter signal
     this.filterParameter.set({ ...this.filterParameter(), ...newFilter });
-    // console.log(this.filterParameter());
-
-    // Automatically load candidates with the updated filter
-    // this.store.loadCandidates(this.filterParameter());
-    // console.log(this.getCurrentFilterParameters())
   }
 
   getCurrentFilterParameters(): FilterProperties {

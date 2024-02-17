@@ -14,6 +14,9 @@ import {MatFormFieldModule} from '@angular/material/form-field';
 import { MatNativeDateModule } from '@angular/material/core';
 import {MatSliderModule} from '@angular/material/slider';
 import { ReactiveFormsModule } from '@angular/forms';
+import {MatSnackBarModule} from '@angular/material/snack-bar';
+import {MatDialogModule} from '@angular/material/dialog';
+
 
 
 
@@ -21,10 +24,10 @@ import { ReactiveFormsModule } from '@angular/forms';
 @NgModule({
   declarations: [],
   imports: [
-    CommonModule, ReactiveFormsModule, MatMenuModule, MatFormFieldModule, MatSliderModule, MatInputModule, MatButtonModule, MatIconModule, MatNativeDateModule, MatDatepickerModule, MatCardModule, MatSelectModule, MatDividerModule, MatRadioModule, NgFor, TruncatePipe
+    CommonModule, ReactiveFormsModule, MatDialogModule, MatSnackBarModule, MatMenuModule, MatFormFieldModule, MatSliderModule, MatInputModule, MatButtonModule, MatIconModule, MatNativeDateModule, MatDatepickerModule, MatCardModule, MatSelectModule, MatDividerModule, MatRadioModule, NgFor, TruncatePipe
   ],
   exports: [
-    CommonModule, ReactiveFormsModule, MatMenuModule, MatFormFieldModule, MatSliderModule, MatInputModule, MatButtonModule, MatIconModule, MatNativeDateModule, MatDatepickerModule, MatCardModule, MatSelectModule, MatDividerModule, MatRadioModule, NgFor, TruncatePipe
+    CommonModule, ReactiveFormsModule, MatDialogModule, MatSnackBarModule, MatMenuModule, MatFormFieldModule, MatSliderModule, MatInputModule, MatButtonModule, MatIconModule, MatNativeDateModule, MatDatepickerModule, MatCardModule, MatSelectModule, MatDividerModule, MatRadioModule, NgFor, TruncatePipe
   ]
 })
 export class SharedModule { }

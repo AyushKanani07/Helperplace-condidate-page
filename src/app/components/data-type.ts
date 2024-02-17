@@ -50,7 +50,11 @@ export interface FilterProperties {
     nationality?: number | string,
     gender?: string,
     order_by?: string,
-    name?: string
+    name?: string,
+    experience_min?: number,
+    experience_max?: number,
+    age_min?: number,
+    age_max?: number
 }
 
 export interface QueryParamFilterProperties {
@@ -67,7 +71,9 @@ export interface QueryParamFilterProperties {
     nationality?: string,
     gender?: string,
     order_by?: string,
-    name?: string
+    name?: string,
+    experience_range?: string,
+    age_range?: string
 }
 
 export interface MasterData {

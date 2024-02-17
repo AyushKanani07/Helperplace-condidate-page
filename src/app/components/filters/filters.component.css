@@ -2,9 +2,6 @@
     margin: 0!important;
 }
 
-.example-slider-label {
-    display: flex;
-    justify-content: space-between;
-    align-items: center;
-    margin-top: 10px;
+mat-slider {
+    width: 95%;
   }
