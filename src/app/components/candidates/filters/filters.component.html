@@ -23,7 +23,8 @@
                         Position</span>
                 </div>
                 <mat-radio-group name="jobPositions" formControlName="job_position" class="flex flex-col">
-                    <mat-radio-button *ngFor="let position of jobPositions" [value]="position.job_position_id">{{
+                    <mat-radio-button *ngFor="let position of jobPositions" [value]="position.job_position_id"
+                        (click)="toggleRadioButton(position.job_position_id,'jobposition')">{{
                         position.position_name }}</mat-radio-button>
                 </mat-radio-group>
             </div>
@@ -59,7 +60,8 @@
                     <span class="font-medium text-[17px] lg:text-[17px] md:text-[16px] text-[#054a84] ">Job Type</span>
                 </div>
                 <mat-radio-group name="jobType" formControlName="job_type" class="flex flex-col">
-                    <mat-radio-button *ngFor="let job of jobType" [value]="job.job_type_id">{{
+                    <mat-radio-button *ngFor="let job of jobType" [value]="job.job_type_id"
+                        (click)="toggleRadioButton(job.job_type_id,'jobtype')">{{
                         job.job_type_name }}</mat-radio-button>
                 </mat-radio-group>
             </div>
@@ -69,8 +71,10 @@
                     Status</span>
                 <mat-form-field class="w-full">
                     <mat-select formControlName="contractStatus" multiple placeholder="Contract Status">
-                        <mat-option *ngFor="let status of contractStatus"
-                            [value]="status.contract_sts_id">{{status.contract_sts_name}}</mat-option>
+                        <ng-container *ngFor="let status of contractStatus">
+                            <mat-option *ngIf="status.contract_sts_id !== 6"
+                                [value]="status.contract_sts_id">{{status.contract_sts_name}}</mat-option>
+                        </ng-container>
                     </mat-select>
                 </mat-form-field>
             </div>
@@ -80,7 +84,8 @@
                     <span class="font-medium text-[17px] lg:text-[17px] md:text-[16px] text-[#054a84] ">Resume by</span>
                 </div>
                 <mat-radio-group name="resumeBy" formControlName="resume_by" class="flex flex-col">
-                    <mat-radio-button *ngFor="let resume of resumeManager" [value]="resume.resume_manager_id">{{
+                    <mat-radio-button *ngFor="let resume of resumeManager" [value]="resume.resume_manager_id"
+                        (click)="toggleRadioButton(resume.resume_manager_id, 'resume')">{{
                         resume.resume_manager_name }}</mat-radio-button>
                 </mat-radio-group>
             </div>
@@ -91,7 +96,8 @@
                         Experience</span>
                 </div>
                 <ng-container *ngIf="isBrowser">
-                    <ngx-slider formControlName="exprange" (userChangeEnd)="expRange($event)" [(value)]="value" [(highValue)]="highValue" [options]="options"></ngx-slider>
+                    <ngx-slider formControlName="exprange" (userChangeEnd)="expRange($event)" [(value)]="value"
+                        [(highValue)]="highValue" [options]="options"></ngx-slider>
                 </ng-container>
             </div>
 
@@ -134,7 +140,8 @@
                     <span class="font-medium text-[17px] lg:text-[17px] md:text-[16px] text-[#054a84] ">Gender</span>
                 </div>
                 <mat-radio-group name="gender" formControlName="gender" class="flex flex-col">
-                    <mat-radio-button *ngFor="let gender of Gender" [value]="gender.gender_id">{{
+                    <mat-radio-button *ngFor="let gender of Gender" [value]="gender.gender_id"
+                        (click)="toggleRadioButton(gender.gender_id, 'gender')">{{
                         gender.gender_value }}</mat-radio-button>
                 </mat-radio-group>
             </div>
@@ -144,7 +151,8 @@
                     <span class="font-medium text-[17px] lg:text-[17px] md:text-[16px] text-[#054a84] ">Age</span>
                 </div>
                 <ng-container *ngIf="isBrowser">
-                    <ngx-slider formControlName="age" (userChangeEnd)="ageRange($event)" [(value)]="age_value" [(highValue)]="age_highValue" [options]="age_options"></ngx-slider>
+                    <ngx-slider formControlName="age" (userChangeEnd)="ageRange($event)" [(value)]="age_value"
+                        [(highValue)]="age_highValue" [options]="age_options"></ngx-slider>
                 </ng-container>
             </div>
 

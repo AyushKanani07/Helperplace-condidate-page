@@ -9,9 +9,9 @@ import { MatIconModule } from '@angular/material/icon';
 import { Observable } from 'rxjs';
 import { map, shareReplay } from 'rxjs/operators';
 import { SharedModule } from '../../shared/shared.module';
-import { HeaderComponent } from "../header/header.component";
-import { ProfilesComponent } from "../profiles/profiles.component";
+import { ProfilesComponent } from "../candidates/profiles/profiles.component";
 import { CandidatesComponent } from "../candidates/candidates.component";
+import { HeaderComponent } from '../candidates/header/header.component';
 
 @Component({
     selector: 'app-main-nav',

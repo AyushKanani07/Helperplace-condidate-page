@@ -1,11 +1,11 @@
 import { Component, OnDestroy, OnInit, inject, signal } from '@angular/core';
-import { SharedModule } from '../../shared/shared.module';
-import { ServiceService } from '../services/service.service';
-import { CandidateResponse, Candidate, FilterProperties, MasterData, QueryParamFilterProperties } from '../data-type';
+import { SharedModule } from '../../../shared/shared.module';
+import { ServiceService } from '../../services/service.service';
+import { CandidateResponse, Candidate, FilterProperties, MasterData, QueryParamFilterProperties } from '../../data-type';
 import { DatePipe, NgFor, NgIf } from '@angular/common';
 import { ActivatedRoute, Router } from '@angular/router';
 import { Subscription } from 'rxjs';
-import { UserStore } from '../user.store';
+import { UserStore } from '../../user.store';
 
 @Component({
   selector: 'app-profiles',

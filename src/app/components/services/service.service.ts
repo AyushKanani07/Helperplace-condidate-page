@@ -1,8 +1,7 @@
 import { HttpClient, HttpParams } from '@angular/common/http';
-import { Injectable, inject, signal } from '@angular/core';
+import { Injectable, effect, signal } from '@angular/core';
 import { CandidateResponse, FilterProperties } from '../data-type';
 import { Observable } from 'rxjs';
-import { UserStore } from '../user.store';
 
 @Injectable({
   providedIn: 'root'
@@ -10,8 +9,11 @@ import { UserStore } from '../user.store';
 export class ServiceService {
 
   private filterParameter = signal<FilterProperties>({});
+  job_position = signal(0);
 
-  constructor(private http: HttpClient) { }
+  constructor(private http: HttpClient) {
+    
+   }
 
   getCandidates(filter: FilterProperties): Observable<CandidateResponse> {
     const page = filter.page;

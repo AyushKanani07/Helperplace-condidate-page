@@ -1,8 +1,7 @@
-import { Component, OnDestroy, OnInit, inject, signal } from '@angular/core';
+import { Component, ElementRef, OnDestroy, OnInit, ViewChild, inject, signal } from '@angular/core';
 import { SharedModule } from '../../shared/shared.module';
-import { HeaderComponent } from "../header/header.component";
-import { FiltersComponent } from "../filters/filters.component";
-import { ProfilesComponent } from "../profiles/profiles.component";
+import { FiltersComponent } from "./filters/filters.component";
+import { ProfilesComponent } from "./profiles/profiles.component";
 import { AsyncPipe } from '@angular/common';
 import { MatToolbarModule } from '@angular/material/toolbar';
 import { MatButtonModule } from '@angular/material/button';
@@ -16,8 +15,9 @@ import { FilterProperties, QueryParamFilterProperties } from '../data-type';
 import { Subscription } from 'rxjs';
 import { UserStore } from '../user.store';
 import { FormBuilder, FormGroup} from '@angular/forms';
-import { FilterPopupComponent } from '../filter-popup/filter-popup.component';
 import { MatDialog } from '@angular/material/dialog';
+import { FilterPopupComponent } from './filters/filter-popup/filter-popup.component';
+import { HeaderComponent } from './header/header.component';
 
 @Component({
     selector: 'app-candidates',
@@ -27,6 +27,8 @@ import { MatDialog } from '@angular/material/dialog';
     imports: [SharedModule,  HeaderComponent, FiltersComponent, ProfilesComponent, MatToolbarModule, MatButtonModule, MatSidenavModule, MatListModule, MatIconModule, AsyncPipe, MainNavComponent]
 })
 export class CandidatesComponent implements OnInit, OnDestroy {
+
+  @ViewChild('btnScrollToTop') btnScrollToTop!: ElementRef;
 
     private queryParamsSubscription: Subscription;
     store = inject(UserStore);
@@ -88,6 +90,10 @@ export class CandidatesComponent implements OnInit, OnDestroy {
         })
     }
 
+    scrollToTop() {
+      window.scrollTo({ top: 0, behavior: 'smooth' });
+    }
+
     findOrderValue(orderId: number): string | undefined{
       const orderValue = this.Order.find(val => val.order_id == orderId);
       if(orderValue){
@@ -108,9 +114,11 @@ export class CandidatesComponent implements OnInit, OnDestroy {
 
     OpenPopup() {
       this.dialog.open(FilterPopupComponent, {
-        width: '70%',
-        height: '92%',
-        enterAnimationDuration: '900ms',
+        maxWidth: '500px',
+        width: '90%',
+        height: '80%',
+        
+        enterAnimationDuration: '700ms',
         exitAnimationDuration: '400ms',
         data: {
         }

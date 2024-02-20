@@ -1,4 +1,4 @@
-<mat-card *ngFor="let candidate of this.store.filteredData()" class="mb-[21px] cursor-pointer w-[]">
+<mat-card *ngFor="let candidate of this.store.filteredData()" class="mb-[21px] cursor-pointer">
     <div class="grid md:grid-cols-[20%_80%] sm:grid-cols-[25%_75%] grid-cols-[35%_65%]">
         <div class="flex flex-col justify-between">
             <div class="lg:p-[16px] md:p-[12px]  sm:p-[16px] p-[9px]">
@@ -6,8 +6,8 @@
                     <img class="rounded-full border-[1px] border-[#979797]" src={{candidate.profile_photo}} alt="">
                 </a>
             </div>
-            <div
-                class="tag h-[30px] lg:w-[140px] md:w-[110px] sm:w-[140px] w-[110px] bg-[#054A84] border-b-2 border-b-yellow-400 mb-[6px] flex items-center place-content-center">
+            <div [ngClass]="{'bg-[#25AE88]': candidate.resume_manager === 'Agency'}"
+                class="tag h-[30px] bg-[#054A84] w-[80%] border-b-2 border-b-yellow-400 mb-[6px] flex items-center place-content-center">
                 <span class="text-white">{{candidate.resume_manager}}</span>
             </div>
         </div>

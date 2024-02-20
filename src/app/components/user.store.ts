@@ -1,5 +1,5 @@
 import { computed, inject, signal } from "@angular/core";
-import { Candidate, CandidateResponse, FilterProperties, State } from "./data-type";
+import { CandidateResponse, FilterProperties, State } from "./data-type";
 import { patchState, signalStore, withComputed, withHooks, withMethods, withState } from "@ngrx/signals";
 import { withDevtools } from "@angular-architects/ngrx-toolkit";
 import { ServiceService } from "./services/service.service";
@@ -30,7 +30,10 @@ const UserState: State = {
         },
         message: ''
     },
-    filteredData: []
+    filteredData: [],
+    filterState: {
+        job_position: 0,
+    }
 }
 
 const InitialState = signal(UserState);
@@ -88,6 +91,11 @@ export const UserStore = signalStore(
                 });
                 // Update the store state with the filtered data
                 patchState(store, { filteredData: filter });
+            },
+            updateFilterState(id,name){
+                if(name == 'job_postion'){
+                    patchState(store, store.filterState().job_position = id)
+                }
             }
         }
     }),

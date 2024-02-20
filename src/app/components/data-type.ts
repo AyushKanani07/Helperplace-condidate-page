@@ -95,7 +95,17 @@ export interface MasterData {
 export interface State {
     candidate: CandidateResponse,
     master: MasterData,
-    filteredData: Candidate[]
+    filteredData: Candidate[],
+    filterState: FilterState
+}
+
+interface FilterState {
+    job_position: number,
+    // start_date: string,
+    // candidate_location: number[],
+    // job_type: number,
+    // contract_status: number[],
+    // resume_by: number,
 }
 
 interface ContractStatus {

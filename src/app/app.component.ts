@@ -1,8 +1,8 @@
 import { Component } from '@angular/core';
 import { RouterOutlet } from '@angular/router';
-import { HeaderComponent } from "./components/header/header.component";
 import { MainNavComponent } from "./components/main-nav/main-nav.component";
 import { SharedModule } from './shared/shared.module';
+import { HeaderComponent } from './components/candidates/header/header.component';
 
 @Component({
     selector: 'app-root',

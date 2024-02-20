@@ -1,15 +1,14 @@
-import { Component, Inject, OnDestroy, OnInit, PLATFORM_ID, inject, signal } from '@angular/core';
-import { SharedModule } from '../../shared/shared.module';
+import { Component, Inject, Injectable, OnDestroy, OnInit, PLATFORM_ID, inject, signal } from '@angular/core';
+import { SharedModule } from '../../../shared/shared.module';
 import { FormBuilder, FormGroup, ReactiveFormsModule } from '@angular/forms';
 import { provideNativeDateAdapter } from '@angular/material/core';
 import { ActivatedRoute, Router } from '@angular/router';
 import { DatePipe, isPlatformBrowser } from '@angular/common';
-import { Subscription, debounceTime } from 'rxjs';
-import { FilterProperties, QueryParamFilterProperties } from '../data-type';
-import { UserStore } from '../user.store';
-import { ServiceService } from '../services/service.service';
+import { Subscription } from 'rxjs';
+import { FilterProperties, QueryParamFilterProperties } from '../../data-type';
+import { UserStore } from '../../user.store';
+import { ServiceService } from '../../services/service.service';
 import { NgxSliderModule, Options } from '@angular-slider/ngx-slider';
-import { MatSliderChange, MatSliderDragEvent } from '@angular/material/slider';
 
 @Component({
   selector: 'app-filters',
@@ -19,6 +18,11 @@ import { MatSliderChange, MatSliderDragEvent } from '@angular/material/slider';
   styleUrl: './filters.component.css',
   providers: [provideNativeDateAdapter()],
 })
+
+@Injectable({
+  providedIn: 'any'
+})
+
 export class FiltersComponent implements OnInit, OnDestroy {
 
   value: number = 0;
@@ -43,7 +47,7 @@ export class FiltersComponent implements OnInit, OnDestroy {
 
   filterForm!: FormGroup;
   private queryParamsSubscription: Subscription;
-  
+
   filterParameter = signal<FilterProperties>({});
   queryParams: QueryParamFilterProperties = {}
   jobPositions: any[];
@@ -109,26 +113,26 @@ export class FiltersComponent implements OnInit, OnDestroy {
         this.page = 1
       }
 
-      if(res['experience_range']){
+      if (res['experience_range']) {
         const [min, max] = res['experience_range'].split('-').map(Number);
         this.filterParameter().experience_min = min;
         this.filterParameter().experience_max = max;
         this.exp_value.set(min);
         this.exp_highValue.set(max);
       }
-      else{
+      else {
         this.filterParameter().experience_min = undefined;
         this.filterParameter().experience_max = undefined;
       }
 
-      if(res['age_range']){
+      if (res['age_range']) {
         const [min, max] = res['age_range'].split('-').map(Number);
         this.filterParameter().age_min = min;
         this.filterParameter().age_max = max;
         this.age_val.set(min);
         this.age_highVal.set(max);
       }
-      else{
+      else {
         this.filterParameter().age_min = undefined;
         this.filterParameter().age_max = undefined;
       }
@@ -139,11 +143,12 @@ export class FiltersComponent implements OnInit, OnDestroy {
           const jobPositionId = this.findJobPositionId(jobPosition);
           if (jobPositionId !== undefined) {
             this.filterParameter().job_position = jobPositionId;
+            // this.store.updateFilterState(jobPositionId,'job_postion');
             this.job_position.set(jobPositionId);
           }
         }
       }
-      else{
+      else {
         this.filterParameter().job_position = undefined
       }
 
@@ -151,6 +156,9 @@ export class FiltersComponent implements OnInit, OnDestroy {
         this.filterParameter().start_date = res['start_date'];
         const date = this.datePipe.transform(res['start_date'], 'M-d-yyyy');
         this.startDate.set(date as string);
+      }
+      else {
+        this.filterParameter().start_date = '';
       }
 
       if (res['country']) {
@@ -171,7 +179,7 @@ export class FiltersComponent implements OnInit, OnDestroy {
           }
         }
       }
-      else{
+      else {
         this.filterParameter().job_type = undefined;
       }
 
@@ -193,7 +201,7 @@ export class FiltersComponent implements OnInit, OnDestroy {
           }
         }
       }
-      else{
+      else {
         this.filterParameter().post_manager = undefined
       }
 
@@ -237,7 +245,7 @@ export class FiltersComponent implements OnInit, OnDestroy {
           }
         }
       }
-      else{
+      else {
         this.filterParameter().gender = undefined
       }
 
@@ -245,12 +253,13 @@ export class FiltersComponent implements OnInit, OnDestroy {
         this.filterParameter().name = res['name'];
         this.search.set(res['name']);
       }
-      else{
+      else {
         this.filterParameter().name = ''
       }
 
       this.service.updateFilterParameter(this.filterParameter())
       this.store.loadCandidates(this.service.getCurrentFilterParameters());
+      // console.log(this.service.getCurrentFilterParameters())
     })
   }
 
@@ -268,107 +277,182 @@ export class FiltersComponent implements OnInit, OnDestroy {
       gender: [this.gender()],
       search: [this.search()],
       exprange: [[this.exp_value(), this.exp_highValue()]],
-      age:[[this.age_val(), this.age_highVal()]],
+      age: [[this.age_val(), this.age_highVal()]],
     });
 
 
     this.filterForm.valueChanges.subscribe((value) => {
-      this.queryParams = {
-        page: this.page
-      }
-      if(value['exprange']){
-        const range = this.exp_Range()
-        if(range){
-          this.queryParams.experience_range = range;
-        }
-      }
-      if(value['age']){
-      const range = this.age_Range()
-        if(range){
-        this.queryParams.age_range = range
-        }
-      }
-      if (value['job_position']) {
+      this.queryParams.page = 1;
+      if (value['job_position'] !== null) {
         const jobPosition = this.findJobPositionName(value['job_position']);
         if (jobPosition) {
           this.queryParams.job_position = jobPosition;
         }
       }
+      else{
+        this.queryParams.job_position = undefined;
+      }
+
       if (value['start_date']) {
         const date = this.datePipe.transform(value['start_date'], 'yyyy-MM-dd');
         if (date) {
           this.queryParams.start_date = date;
         }
       }
-      if (value['location']) {
+      else{
+        this.queryParams.start_date = undefined;
+      }
+
+      if (value['location'].length >=1 ) {
         const location = this.findLocationName(value['location']);
         if (location) {
           this.queryParams.country = location;
         }
       }
+      else{
+        this.queryParams.country = undefined;
+      }
+
       if (value['job_type']) {
         const jobType = this.findJobTypeName(value['job_type']);
         if (jobType) {
           this.queryParams.job_type = jobType;
         }
       }
-      if (value['contractStatus']) {
+      else{
+        this.queryParams.job_type = undefined;
+      }
+
+      if (value['contractStatus'].length >=1) {
         const contract = this.findContractName(value['contractStatus']);
         if (contract) {
           this.queryParams.contract_status = contract;
         }
       }
+      else{
+        this.queryParams.contract_status = undefined;
+      }
+
       if (value['resume_by']) {
         const resumeBy = this.findResumeName(value['resume_by']);
         if (resumeBy) {
           this.queryParams.post_manager = resumeBy;
         }
       }
-      if (value['language']) {
+      else{
+        this.queryParams.post_manager = undefined;
+      }
+
+      if (value['language'].length >=1) {
         const language = this.findLanguageName(value['language']);
         if (language) {
           this.queryParams.Language = language;
         }
       }
+      else{
+        this.queryParams.Language = undefined;
+      }
+
       if (value['skill']) {
         const skill = this.findSkillName(value['skill']);
         if (skill) {
           this.queryParams.Main_Skills = skill;
         }
       }
+      else{
+        this.queryParams.Main_Skills = undefined;
+      }
+
       if (value['nationality']) {
         const nationality = this.findNationalityName(value['nationality']);
         if (nationality) {
           this.queryParams.nationality = nationality;
         }
       }
+      else{
+        this.queryParams.nationality = undefined;
+      }
+
       if (value['gender']) {
         const gender = this.findGenderValue(value['gender']);
         if (gender) {
           this.queryParams.gender = gender;
         }
       }
+      else{
+        this.queryParams.gender = undefined;
+      }
       this.navigateQuery()
     })
   }
 
-  expRange(event: any) {
-    const range = event.value + '-' + event.highValue
-    if (range) {
-      this.queryParams.experience_range = range;
-      this.exp_Range.set(range)
-      this.navigateQuery()
+  toggleRadioButton(id: number, name: string) {
+    if (name === 'jobposition') {
+      const control = this.filterForm.get('job_position');
+      const currentValue = control?.value;
+      if (currentValue === id) {
+        control?.patchValue(null);
+      }
+      else {
+        control?.patchValue(id);
+      }
+    }
+    if(name === 'jobtype'){
+      const control = this.filterForm.get('job_type');
+      const currentValue = control?.value;
+      if (currentValue === id) {
+        control?.patchValue(null);
+      }
+      else {
+        control?.patchValue(id);
+      }
+    }
+    if(name === 'resume'){
+      const control = this.filterForm.get('resume_by');
+      const currentValue = control?.value;
+      if (currentValue === id) {
+        control?.patchValue(null);
+      }
+      else {
+        control?.patchValue(id);
+      }
+    }
+    if(name === 'gender'){
+      const control = this.filterForm.get('gender');
+      const currentValue = control?.value;
+      if (currentValue === id) {
+        control?.patchValue(null);
+      }
+      else {
+        control?.patchValue(id);
+      }
     }
   }
 
-  ageRange(event: any) {
-    console.log('event: ', event);
-    const range = event.value + '-' + event.highValue
-    if (range) {
-      this.queryParams.age_range = range;
-      this.age_Range.set(range)
-      this.navigateQuery()
+  expRange(event: any) {
+    const range = event.value + '-' + event.highValue;
+    if (range !== '0-40') {
+      this.queryParams.experience_range = range;
     }
+    else{
+      this.queryParams.experience_range = undefined;
+      this.filterParameter().experience_min = 0;
+      this.filterParameter().experience_max = 40;
+    }
+    this.navigateQuery()
+  }
+
+  ageRange(event: any) {
+    const range = event.value + '-' + event.highValue
+    if (range !== '18-60') {
+      this.queryParams.age_range = range;
+    }
+    else{
+      this.queryParams.age_range = undefined;
+      this.filterParameter().age_min = 18;
+      this.filterParameter().age_max = 60;
+    }
+    this.navigateQuery()
   }
 
 
@@ -521,8 +605,11 @@ export class FiltersComponent implements OnInit, OnDestroy {
     const searchValue = this.filterForm.get('search')?.value;
     if (searchValue) {
       this.queryParams.name = searchValue;
-      this.navigateQuery()
     }
+    else{
+      this.queryParams.name = undefined
+    }
+    this.navigateQuery()
   }
 
 
@@ -539,14 +626,16 @@ export class FiltersComponent implements OnInit, OnDestroy {
       nationality: 0,
       gender: 0,
       search: '',
-      exprange: [0,40],
-      age: [18,60]
+      exprange: [0, 40],
+      age: [18, 60]
     });
+
+    this.exp_value.set(0);
+    this.exp_highValue.set(40)
 
     this.queryParams = {
       page: this.page
     }
-    console.log('this.filterForm: ', this.filterForm.value);
     this.navigateQuery();
   }
 

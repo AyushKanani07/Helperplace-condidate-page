@@ -1,7 +1,7 @@
 import { Component } from '@angular/core';
-import { FiltersComponent } from "../filters/filters.component";
-import { SharedModule } from '../../shared/shared.module';
 import { MatDialogRef } from '@angular/material/dialog';
+import { SharedModule } from '../../../../shared/shared.module';
+import { FiltersComponent } from '../filters.component';
 
 @Component({
     selector: 'app-filter-popup',
@@ -12,7 +12,7 @@ import { MatDialogRef } from '@angular/material/dialog';
 })
 export class FilterPopupComponent {
 
-    constructor(private dialogRef: MatDialogRef<FiltersComponent>){}
+  constructor(private dialogRef: MatDialogRef<FiltersComponent>){}
 
     closePopup(): void {
         this.dialogRef.close();
