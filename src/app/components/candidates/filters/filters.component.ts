@@ -1,4 +1,4 @@
-import { Component, Inject, Injectable, OnDestroy, OnInit, PLATFORM_ID, inject, signal } from '@angular/core';
+import { Component, Inject, Injectable, Input, OnDestroy, OnInit, PLATFORM_ID, inject, signal } from '@angular/core';
 import { SharedModule } from '../../../shared/shared.module';
 import { FormBuilder, FormGroup, ReactiveFormsModule } from '@angular/forms';
 import { provideNativeDateAdapter } from '@angular/material/core';
@@ -24,6 +24,9 @@ import { NgxSliderModule, Options } from '@angular-slider/ngx-slider';
 })
 
 export class FiltersComponent implements OnInit, OnDestroy {
+  // @Input() data: any;
+
+  // inputData: any;
 
   value: number = 0;
   highValue: number = 40;
@@ -97,6 +100,7 @@ export class FiltersComponent implements OnInit, OnDestroy {
   isBrowser: boolean;
 
   constructor(@Inject(PLATFORM_ID) private platformId: Object, private fb: FormBuilder, private router: Router, private activatedRoute: ActivatedRoute, private service: ServiceService) {
+    // console.log(this.data);
     this.isBrowser = isPlatformBrowser(platformId);
     this.jobPositions = this.store.master().data.job_position;
     this.candidateLocation = this.store.master().data.candidate_country;
@@ -264,6 +268,8 @@ export class FiltersComponent implements OnInit, OnDestroy {
   }
 
   ngOnInit(): void {
+    // this.inputData = this.data
+
     this.filterForm = this.fb.group({
       job_position: [this.job_position()],
       start_date: [],
@@ -282,6 +288,7 @@ export class FiltersComponent implements OnInit, OnDestroy {
 
 
     this.filterForm.valueChanges.subscribe((value) => {
+      // console.log(this.inputData)
       this.queryParams.page = 1;
       if (value['job_position'] !== null) {
         const jobPosition = this.findJobPositionName(value['job_position']);

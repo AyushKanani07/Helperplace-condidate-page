@@ -56,7 +56,7 @@ export class CandidatesComponent implements OnInit, OnDestroy {
     constructor(private dialog: MatDialog, private fb: FormBuilder, private router: Router, private activatedRoute: ActivatedRoute, private service: ServiceService){
         this.queryParamsSubscription = this.activatedRoute.queryParams.subscribe((res) => {
           this.queryParams = res;
-
+          
           if(res['order_by']){
             this.filterParameter().order_by = res['order_by'];
             const order = res['order_by'] ? res['order_by'].replace(/_/g, ' ') : '';
@@ -69,6 +69,7 @@ export class CandidatesComponent implements OnInit, OnDestroy {
 
           this.service.updateFilterParameter(this.filterParameter());
         })
+
     }
 
     ngOnInit(): void {
