@@ -111,4 +111,8 @@ export class ServiceService {
   getCurrentFilterParameters(): FilterProperties {
     return this.filterParameter();
   }
+
+  getCandidateByUrl(url:any){
+    return this.http.get('https://api.helperplace.com/api/mobile/resume/GetResumeByUrl?resume_url='+url)
+  }
 }

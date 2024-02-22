@@ -16,6 +16,8 @@ import {MatSliderModule} from '@angular/material/slider';
 import { ReactiveFormsModule } from '@angular/forms';
 import {MatSnackBarModule} from '@angular/material/snack-bar';
 import {MatDialogModule} from '@angular/material/dialog';
+import { RouterLink } from '@angular/router';
+import { NgxUiLoaderModule } from 'ngx-ui-loader';
 
 
 
@@ -24,10 +26,10 @@ import {MatDialogModule} from '@angular/material/dialog';
 @NgModule({
   declarations: [],
   imports: [
-    CommonModule, ReactiveFormsModule, MatDialogModule, MatSnackBarModule, MatMenuModule, MatFormFieldModule, MatSliderModule, MatInputModule, MatButtonModule, MatIconModule, MatNativeDateModule, MatDatepickerModule, MatCardModule, MatSelectModule, MatDividerModule, MatRadioModule, NgFor, TruncatePipe
+    CommonModule, NgxUiLoaderModule, RouterLink, ReactiveFormsModule, MatDialogModule, MatSnackBarModule, MatMenuModule, MatFormFieldModule, MatSliderModule, MatInputModule, MatButtonModule, MatIconModule, MatNativeDateModule, MatDatepickerModule, MatCardModule, MatSelectModule, MatDividerModule, MatRadioModule, NgFor, TruncatePipe
   ],
   exports: [
-    CommonModule, ReactiveFormsModule, MatDialogModule, MatSnackBarModule, MatMenuModule, MatFormFieldModule, MatSliderModule, MatInputModule, MatButtonModule, MatIconModule, MatNativeDateModule, MatDatepickerModule, MatCardModule, MatSelectModule, MatDividerModule, MatRadioModule, NgFor, TruncatePipe
+    CommonModule, NgxUiLoaderModule, RouterLink, ReactiveFormsModule, MatDialogModule, MatSnackBarModule, MatMenuModule, MatFormFieldModule, MatSliderModule, MatInputModule, MatButtonModule, MatIconModule, MatNativeDateModule, MatDatepickerModule, MatCardModule, MatSelectModule, MatDividerModule, MatRadioModule, NgFor, TruncatePipe
   ]
 })
 export class SharedModule { }

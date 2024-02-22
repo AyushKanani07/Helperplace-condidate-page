@@ -87,16 +87,23 @@ export interface MasterData {
         language: Language[];
         skill_category: Skill_category[];
         skills: Skill[];
-        nationality: Nationality[]
+        nationality: Nationality[];
+        religion: Religion[]
     },
     message: string
+}
+
+interface Religion {
+    religion_id: number,
+    religion_name: string
 }
 
 export interface State {
     candidate: CandidateResponse,
     master: MasterData,
     filteredData: Candidate[],
-    filterState: FilterState
+    filterState: FilterState,
+    candidateByUrl: any
 }
 
 interface FilterState {

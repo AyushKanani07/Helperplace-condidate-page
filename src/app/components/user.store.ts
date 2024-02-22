@@ -26,14 +26,16 @@ const UserState: State = {
             language: [],
             skill_category: [],
             skills: [],
-            nationality: []
+            nationality: [],
+            religion: []
         },
         message: ''
     },
     filteredData: [],
     filterState: {
         job_position: 0,
-    }
+    },
+    candidateByUrl: {}
 }
 
 const InitialState = signal(UserState);
@@ -92,15 +94,25 @@ export const UserStore = signalStore(
                 // Update the store state with the filtered data
                 patchState(store, { filteredData: filter });
             },
-            updateFilterState(id,name){
-                if(name == 'job_postion'){
+            updateFilterState(id, name) {
+                if (name == 'job_postion') {
                     patchState(store, store.filterState().job_position = id)
                 }
-            }
+            },
+            getCandidateByUrl(url){
+                service.getCandidateByUrl(url).subscribe((result:any) => {
+                    if (result && result.data) {
+                        patchState(store, { candidateByUrl: result })
+                    }
+                })
+            },
+            // filtringSingleCandidate(){
+            //     const candidateData = store.candidateByUrl?.data
+            // }
         }
     }),
     withHooks({
-        onInit({loadMasterData, filtering}){
+        onInit({ loadMasterData, filtering }) {
             loadMasterData();
             filtering()
         },

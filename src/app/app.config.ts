@@ -1,5 +1,5 @@
 import { ApplicationConfig, importProvidersFrom, isDevMode } from '@angular/core';
-import { provideRouter } from '@angular/router';
+import { provideRouter, withComponentInputBinding } from '@angular/router';
 
 import { routes } from './app.routes';
 import { provideClientHydration } from '@angular/platform-browser';
@@ -10,7 +10,7 @@ import { DatePipe } from '@angular/common';
 import { NgxSliderModule } from '@angular-slider/ngx-slider';
 
 export const appConfig: ApplicationConfig = {
-  providers: [provideRouter(routes), provideClientHydration(), provideAnimationsAsync(), DatePipe,
+  providers: [provideRouter(routes, withComponentInputBinding()), provideClientHydration(), provideAnimationsAsync(), DatePipe,
     provideHttpClient(withFetch()),
     // importProvidersFrom([NgxSliderModule]),
      provideStoreDevtools({ maxAge: 25, logOnly: !isDevMode() })]

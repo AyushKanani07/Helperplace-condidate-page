@@ -1,4 +1,4 @@
-<mat-card *ngFor="let candidate of this.store.filteredData()" class="mb-[21px] cursor-pointer">
+<mat-card *ngFor="let candidate of this.store.filteredData()" class="mb-[21px] cursor-pointer" (click)="candidateDetails(candidate.resume_url)">
     <div class="grid md:grid-cols-[20%_80%] sm:grid-cols-[25%_75%] grid-cols-[35%_65%]">
         <div class="flex flex-col justify-between">
             <div class="lg:p-[16px] md:p-[12px]  sm:p-[16px] p-[9px]">

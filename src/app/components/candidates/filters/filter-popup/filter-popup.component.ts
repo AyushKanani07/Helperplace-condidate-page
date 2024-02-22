@@ -1,4 +1,4 @@
-import { Component } from '@angular/core';
+import { Component, ViewChild } from '@angular/core';
 import { MatDialogRef } from '@angular/material/dialog';
 import { SharedModule } from '../../../../shared/shared.module';
 import { FiltersComponent } from '../filters.component';
@@ -11,6 +11,8 @@ import { FiltersComponent } from '../filters.component';
     imports: [FiltersComponent, SharedModule]
 })
 export class FilterPopupComponent {
+
+  // @ViewChild(FiltersComponent, {static: true}) public filtersComponent: FiltersComponent
 
   constructor(private dialogRef: MatDialogRef<FiltersComponent>){}
 

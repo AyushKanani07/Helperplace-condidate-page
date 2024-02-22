@@ -19,41 +19,48 @@ export class ProfilesComponent implements OnInit, OnDestroy {
   private queryParamsSubscription: Subscription;
   readonly store = inject(UserStore);
 
-  candidateList: Candidate[]=[];
+  candidateList: Candidate[] = [];
   masterdata: any;
-  filteredData: Candidate[]=[]
+  filteredData: Candidate[] = []
 
   currentPage = signal(1);
   pageSize = signal(20); // Adjust this as needed
 
-  queryParams:QueryParamFilterProperties={}
-  filterParameter:FilterProperties = {};
+  queryParams: QueryParamFilterProperties = {}
+  filterParameter: FilterProperties = {};
 
-  constructor(private router:Router, private activatedRoute: ActivatedRoute, private service:ServiceService) {
+  constructor(private router: Router, private activatedRoute: ActivatedRoute, private service: ServiceService) {
     this.filterParameter.pageSize = this.pageSize();
 
     this.queryParamsSubscription = this.activatedRoute.queryParams.subscribe((res) => {
       this.queryParams = res;
 
       const pageNumber = parseInt(res['page']);
-      if(isNaN(pageNumber)){
+      if (isNaN(pageNumber)) {
         this.currentPage.set(1);
         this.filterParameter.page = 0;
       }
-      else if(pageNumber === 0){
+      else if (pageNumber === 0) {
         this.currentPage.set(1);
         this.filterParameter.page = 0;
       }
-      else{
+      else {
         this.currentPage.set(pageNumber);
         this.filterParameter.page = pageNumber - 1;
       }
       this.service.updateFilterParameter(this.filterParameter)
     })
   }
-  
+
   ngOnInit(): void {
-    
+
+  }
+
+  candidateDetails(url: string) {
+    // this.store.getCandidateByUrl(url);
+    const navigate = 'resume' + '/' + url;
+    console.log(navigate)
+    this.router.navigate([navigate]);
   }
 
   onPageChange(pages: number) {

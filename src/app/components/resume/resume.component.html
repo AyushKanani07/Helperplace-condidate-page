@@ -1,0 +1,129 @@
+<div class="pl-[21px]">
+    <div class="grid grid-cols-[75%_25%]">
+        <div>
+            <mat-card class="mt-[15px] mb-[21px]" *ngIf="data">
+                <div class="relative">
+                    <div
+                        class="h-[150px] w-[150px] overflow-hidden ml-[25px] rounded-full border-[1px] z-[3] border-[#707070] absolute top-[47px]">
+                        <img src="{{img}}" alt="">
+                    </div>
+                    <div class="w-[195px] absolute bottom-0 my-[0.5rem] mr-[1rem]">
+                        <div [ngClass]="{'bg-[#25AE88]': resume_manager === 'Agency'}"
+                            class="tag text-white w-[90%] h-[32px] bg-[#054A84] border-b-2 border-b-yellow-400 flex items-center place-content-center ">
+                            <span>{{resume_manager}}</span>
+                        </div>
+                    </div>
+                    <span
+                        class="absolute rounded-[0_5px_0_7px] right-0 border-none bg-[#25ae88] z-[2] leading-5 h-[30px] py-[5px] px-[15px] text-white w-auto">Very
+                        Active</span>
+                    <div class="relative opacity-60 ">
+                        <img class="w-full bg-cover h-[120px] rounded-[5px_5px_0_0]"
+                            src="https://cdn.helperplace.com/front-app/assets/images/misc/resume-lg.webp" alt="">
+                    </div>
+                    <div class="ml-[195px] mb-[12px]">
+                        <div class="pb-[15px] pt-[20px] pr-[15px]">
+                            <div class="flex flex-row items-center gap-[12px]">
+                                <div>
+                                    <span class="text-[30px] text-[#054a84] font-medium">{{helperName}}</span>
+                                </div>
+                                <div class="mt-[0.5rem]">
+                                    <span class="text-[18px] my-[5px] text-[#054a84] font-light leading-5">({{age}}
+                                        Years)</span>
+                                </div>
+                            </div>
+                            <div class="flex justify-between items-center mt-[14px]">
+                                <div>
+                                    <p class="text-[16px] mb-[2px] text-left font-normal">
+                                        <span>{{gender}} | {{marital_status}} | {{child_count}} Kid | {{nationality}} |
+                                            {{religion}}</span>
+                                    </p>
+                                </div>
+                                <div>
+                                    <button
+                                        class="py-[0.375rem] text-[1rem] w-[90px] px-[0.5rem] rounded-md text-white hover:bg-[#ebba16] hover:border-[#ebba16] bg-[#25ae88] border-[#25ae88] ease-in-out duration-150">Contact</button>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                <div class="border-b-2 border-b-[#054a84] py-[5px] bg-[rgba(5,74,132,.1490196078)]">
+                    <span class="flex my-[5px] text-[#054a84] text-[21px] font-medium mx-auto max-w-[91%]">Professional
+                        Info</span>
+                </div>
+                <div class="py-[1rem]">
+                    <div class="grid max-w-[91.6%] mx-auto px-[15px]">
+                        <div class="grid grid-cols-2">
+                            <div class="flex items-center pt-[5px] mb-[8px] ">
+                                <mat-icon><span
+                                        class="material-symbols-outlined text-[#25ae88]">person</span></mat-icon>
+                                <span class="text-[#434345] px-[9px] font-semibold text-[16px]"> {{job_position}} |
+                                    {{contract_status}}</span>
+                            </div>
+                            <div class="flex items-center pt-[5px] mb-[8px] ">
+                                <mat-icon><span class="material-symbols-outlined text-[#25ae88]">
+                                        location_on
+                                    </span></mat-icon>
+                                <span class="text-[#434345] px-[9px] font-semibold text-[16px]"> Present Location:
+                                    {{candidate_country}}</span>
+                            </div>
+                            <div class="flex items-center pt-[5px] mb-[8px] ">
+                                <mat-icon><span class="material-symbols-outlined text-[#25ae88]">
+                                        verified
+                                    </span></mat-icon>
+                                <span class="text-[#434345] px-[9px] font-semibold text-[16px]"> {{experience_year}}
+                                    Years Experience
+                                </span>
+                            </div>
+                            <div class="flex items-center pt-[5px] mb-[8px] ">
+                                <mat-icon><span class="material-symbols-outlined text-[#25ae88]">
+                                        calendar_month
+                                    </span></mat-icon>
+                                <span class="text-[#434345] px-[9px] font-semibold text-[16px]"> Start from
+                                    {{startDtae}}
+                                    | {{job_type}} </span>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="border-b-2 border-b-[#054a84] py-[5px] bg-[rgba(5,74,132,.1490196078)]">
+                    <span class="flex my-[5px] text-[#054a84] text-[21px] font-medium mx-auto max-w-[91%]">Skills /
+                        Duties</span>
+                </div>
+
+                <div class="mt-[1rem]">
+                    <div class="max-w-[91%] mb-[10px]">
+                        <ng-container *ngFor="let entry of mainContentEntries">
+                            <div class="grid grid-cols-[10%_90%] mt-[14px] mx-auto max-w-[91%]" *ngIf="entry as keyValue">
+                                <div class="py-[6px] pr-[9px] h-auto w-[50px] text-center">
+                                    <img [src]="'https://cdn.helperplace.com/skill_cat/' + keyValue[1].img  + '.webp'" alt="">
+                                </div>
+                                <div class="self-center ml-[21px] w-[88%]">
+                                    <p class="text-[#054a84] text-[16px] mb-[10px] font-medium">{{ keyValue[1].name }}:</p>
+                                    <ng-container *ngFor="let detail of details[keyValue[0]]">
+                                    <span
+                                        class="float-left py-[5px] px-[9px] mr-[10px] mb-[10px] rounded border-[1px] border-[#2d2d2d] bg-transparent">{{ detail }}</span>
+                                    </ng-container>
+                                </div>
+                            </div>
+                        </ng-container>
+                    </div>
+                </div>
+
+                <div class="border-b-2 border-b-[#054a84] py-[5px] bg-[rgba(5,74,132,.1490196078)]">
+                    <span class="flex my-[5px] text-[#054a84] text-[21px] font-medium mx-auto max-w-[91%]">About
+                        Me</span>
+                </div>
+
+                <div>
+                    <div class="flex max-w-[91%] mx-auto px-[15px] mt-[1rem]">
+                        <p class="mb-[15px] text-[#434345] mt-[4px] text-[16px] leading-7 text-justify">
+                            {{resume_content}}
+                        </p>
+                    </div>
+                </div>
+
+            </mat-card>
+        </div>
+    </div>
+</div>

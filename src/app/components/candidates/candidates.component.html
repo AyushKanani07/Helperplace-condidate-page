@@ -29,7 +29,7 @@
                 </form>
                 <div class="mt-[20px] grid lg:grid-cols-[27%_73%] md:grid-cols-[25%_75%]">
                     <div class="pr-[12px] md:flex hidden">
-                        <app-filters></app-filters>
+                        <app-filters [data]="queryParams"></app-filters>
                     </div>
                     <div class="md:flex md:flex-wrap md:justify-end md:pl-[12px]">
                         <app-profiles></app-profiles>

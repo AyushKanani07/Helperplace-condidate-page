@@ -1,4 +1,4 @@
-import { Component, Inject, Injectable, Input, OnDestroy, OnInit, PLATFORM_ID, inject, signal } from '@angular/core';
+import { Component, Inject, Injectable, Input, OnDestroy, OnInit, PLATFORM_ID, ViewChild, inject, signal } from '@angular/core';
 import { SharedModule } from '../../../shared/shared.module';
 import { FormBuilder, FormGroup, ReactiveFormsModule } from '@angular/forms';
 import { provideNativeDateAdapter } from '@angular/material/core';
@@ -9,6 +9,7 @@ import { FilterProperties, QueryParamFilterProperties } from '../../data-type';
 import { UserStore } from '../../user.store';
 import { ServiceService } from '../../services/service.service';
 import { NgxSliderModule, Options } from '@angular-slider/ngx-slider';
+import { FilterPopupComponent } from './filter-popup/filter-popup.component';
 
 @Component({
   selector: 'app-filters',
@@ -24,9 +25,9 @@ import { NgxSliderModule, Options } from '@angular-slider/ngx-slider';
 })
 
 export class FiltersComponent implements OnInit, OnDestroy {
-  // @Input() data: any;
+  @Input() data: any;
 
-  // inputData: any;
+  inputData: any;
 
   value: number = 0;
   highValue: number = 40;
@@ -83,7 +84,7 @@ export class FiltersComponent implements OnInit, OnDestroy {
   job_position = signal(0);
   job_type = signal(0);
   resume_by = signal(0);
-  startDate = signal('');
+  startDate = signal<(Date | string)>(new Date);
   location = signal<(number | undefined)[]>([]);
   contract_status = signal<(number | undefined)[]>([]);
   language_skill = signal<(number | undefined)[]>([]);
@@ -158,10 +159,13 @@ export class FiltersComponent implements OnInit, OnDestroy {
 
       if (res['start_date']) {
         this.filterParameter().start_date = res['start_date'];
-        const date = this.datePipe.transform(res['start_date'], 'M-d-yyyy');
-        this.startDate.set(date as string);
+        const date = new Date(res['start_date']);
+        this.startDate.set(date);
+        // const date = this.datePipe.transform(res['start_date'], 'M-d-yyyy');
+        // this.startDate.set(date as string);
       }
       else {
+        this.startDate.set('')
         this.filterParameter().start_date = '';
       }
 
@@ -267,13 +271,14 @@ export class FiltersComponent implements OnInit, OnDestroy {
     })
   }
 
+
   ngOnInit(): void {
-    // this.inputData = this.data
+    this.inputData = this.data
 
     this.filterForm = this.fb.group({
       job_position: [this.job_position()],
-      start_date: [],
-      location: [this.location()],
+      start_date: [this.startDate()],
+      location: [this.location()], 
       job_type: [this.job_type()],
       contractStatus: [this.contract_status()],
       resume_by: [this.resume_by()],
