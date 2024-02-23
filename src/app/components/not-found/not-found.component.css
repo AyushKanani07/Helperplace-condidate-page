@@ -1,0 +1,17 @@
+.bg-darkest{
+    background: linear-gradient(#252525,#000);
+    height: 100vh;
+    overflow: hidden;
+    position: fixed;
+    width: 100%;
+    top: 0;
+    position: fixed;
+    z-index: 100;
+}
+
+.stars{
+    background-repeat: repeat;
+    background-size: contain;
+    background-position: left top;
+    height: 100vh;
+}

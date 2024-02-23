@@ -2,6 +2,7 @@ import { Routes } from '@angular/router';
 import { CandidatesComponent } from './components/candidates/candidates.component';
 import { MainNavComponent } from './components/main-nav/main-nav.component';
 import { ResumeComponent } from './components/resume/resume.component';
+import { NotFoundComponent } from './components/not-found/not-found.component';
 
 export const routes: Routes = [
     {
@@ -17,5 +18,10 @@ export const routes: Routes = [
         path:'resume/:country/:jobType/:candidateName/:candidateId',
         loadChildren: () => import('./components/resume/resume.routes')
         // component: ResumeComponent
+    },
+    {
+        path: '**',
+        pathMatch: 'full',
+        component: NotFoundComponent
     }
 ];

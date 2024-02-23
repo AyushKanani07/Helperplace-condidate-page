@@ -94,15 +94,20 @@
                 <div class="mt-[1rem]">
                     <div class="max-w-[91%] mb-[10px]">
                         <ng-container *ngFor="let entry of mainContentEntries">
-                            <div class="grid grid-cols-[10%_90%] mt-[14px] mx-auto max-w-[91%]" *ngIf="entry as keyValue">
+                            <div class="grid grid-cols-[10%_90%] mt-[14px] mx-auto max-w-[91%]"
+                                *ngIf="details[entry[0]] && details[entry[0]].length > 0">
                                 <div class="py-[6px] pr-[9px] h-auto w-[50px] text-center">
-                                    <img [src]="'https://cdn.helperplace.com/skill_cat/' + keyValue[1].img  + '.webp'" alt="">
+                                    <img [src]="'https://cdn.helperplace.com/skill_cat/' + entry[1].img  + '.webp'"
+                                        alt="">
                                 </div>
                                 <div class="self-center ml-[21px] w-[88%]">
-                                    <p class="text-[#054a84] text-[16px] mb-[10px] font-medium">{{ keyValue[1].name }}:</p>
-                                    <ng-container *ngFor="let detail of details[keyValue[0]]">
-                                    <span
-                                        class="float-left py-[5px] px-[9px] mr-[10px] mb-[10px] rounded border-[1px] border-[#2d2d2d] bg-transparent">{{ detail }}</span>
+                                    <p class="text-[#054a84] text-[16px] mb-[10px] font-medium">{{ entry[1].name }}:</p>
+                                    <ng-container *ngFor="let detail of details[entry[0]]">
+                                        <span [style.backgroundColor]="entry[1].color"
+                                            [ngClass]="entry[1].color === 'transparent' ? 'text-black' : 'text-white'"
+                                            [ngStyle]="{ 'border-color': entry[1].color !== 'transparent' ? entry[1].color : '#2d2d2d'}"
+                                            class="float-left py-[5px] px-[9px] mr-[10px] mb-[10px] rounded border-[1px] border-[#2d2d2d] bg-transparent">{{
+                                            detail }}</span>
                                     </ng-container>
                                 </div>
                             </div>

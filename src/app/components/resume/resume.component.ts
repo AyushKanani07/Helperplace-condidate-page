@@ -32,14 +32,16 @@ export class ResumeComponent {
   masterdata = this.store.master().data
 
   main_content = {
-    1: { img: '1_1599642484', name: 'Language' },
-    4: { img: '4_1599643968', name: 'Main Skills' },
-    2: { img: '2_1599644151', name: 'Cooking Skills' },
-    3: { img: '3_1599642528', name: 'Other Skills' },
-    5: { img: '5_1599644127', name: 'Personality' }
+    1: { img: '1_1599642484', name: 'Language', color: 'transparent' },
+    4: { img: '4_1599643968', name: 'Main Skills', color: '#7a7a7a' },
+    2: { img: '2_1599644151', name: 'Cooking Skills', color: '#25ae88' },
+    3: { img: '3_1599642528', name: 'Other Skills', color: '#054a84' },
+    5: { img: '5_1599644127', name: 'Personality', color: 'transparent' }
   }
 
-  mainContentEntries: [string, { img: string; name: string }][] = [];
+  order = ['1', '4', '2','3', '5']
+
+  mainContentEntries: [string, { img: string; name: string; color:string }][] = [];
 
   details: any;
 
@@ -67,7 +69,9 @@ export class ResumeComponent {
     // this.resume_Detail = this.store.candidateByUrl()
     // this.data = this.store.candidateByUrl().data
     // console.log(this.data)
-    this.mainContentEntries = Object.entries(this.main_content);
+    // this.mainContentEntries = Object.entries(this.main_content);
+    this.mainContentEntries = Object.entries(this.main_content).sort(([a], [b]) => this.order.indexOf(a) - this.order.indexOf(b));
+    console.log(this.mainContentEntries)
   }
 
   async ngOnInit(): Promise<void> {

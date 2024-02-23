@@ -12,13 +12,14 @@ import { SharedModule } from '../../shared/shared.module';
 import { ProfilesComponent } from "../candidates/profiles/profiles.component";
 import { CandidatesComponent } from "../candidates/candidates.component";
 import { HeaderComponent } from '../candidates/header/header.component';
+import { RouterOutlet } from '@angular/router';
 
 @Component({
     selector: 'app-main-nav',
     templateUrl: './main-nav.component.html',
     styleUrl: './main-nav.component.css',
     standalone: true,
-    imports: [
+    imports: [ RouterOutlet,
         MatToolbarModule, MatButtonModule, MatSidenavModule, MatListModule, MatIconModule, AsyncPipe, SharedModule,
         HeaderComponent,
         ProfilesComponent,
