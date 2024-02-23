@@ -100,15 +100,21 @@ export const UserStore = signalStore(
                 }
             },
             getCandidateByUrl(url){
-                service.getCandidateByUrl(url).subscribe((result:any) => {
-                    if (result && result.data) {
-                        patchState(store, { candidateByUrl: result })
-                    }
+                return new Promise((resolve) => {
+                    let storeData = {} as any;
+                    service.getCandidateByUrl(url).subscribe((result:any) => {
+                        if (result && result.data) {
+                            patchState(store, { candidateByUrl: result })
+                        }
+                        storeData = store.candidateByUrl();
+                        console.log('storeData: ', storeData.data);
+                        resolve(storeData.data)
+                    })
                 })
             },
-            // filtringSingleCandidate(){
-            //     const candidateData = store.candidateByUrl?.data
-            // }
+            clearCandidateByUrl(){
+                patchState(store, { candidateByUrl: {} })
+            }
         }
     }),
     withHooks({

@@ -59,7 +59,6 @@ export class ProfilesComponent implements OnInit, OnDestroy {
   candidateDetails(url: string) {
     // this.store.getCandidateByUrl(url);
     const navigate = 'resume' + '/' + url;
-    console.log(navigate)
     this.router.navigate([navigate]);
   }
 
